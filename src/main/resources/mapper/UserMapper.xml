@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.checkin.mapper.UserMapper">
+
+    <select id="createEmployeeAccount" parameterType="com.example.checkin.model.request.EmployeeRequest"
+            resultType="com.example.checkin.model.response.UserResponse">
+        INSERT INTO user_account (
+            "name",
+            username,
+            password,
+            role
+        )VALUES(
+                   #{name},
+                   #{userName},
+                   #{password},
+                   #{roleCode}
+               )
+            RETURNING *;
+    </select>
+    <select id="finAccountByUsername" resultType="com.example.checkin.model.response.UserResponse">
+        SELECT * FROM user_account
+        WHERE username = #{userName}
+        limit 1;
+    </select>
+    <select id="checkUsernameExistion" resultType="com.example.checkin.model.response.UserResponse">
+        SELECT * FROM user_account
+        WHERE username = #{userName}
+    </select>
+</mapper>

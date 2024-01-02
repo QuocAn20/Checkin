@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.checkin.mapper.RoleMapper">
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE FROM employee_role
+        WHERE employee_id = #{id}
+    </delete>
+
+    <select id="create" parameterType="com.example.checkin.model.request.EmployeeRequest"
+            resultType="com.example.checkin.model.response.EmployeeResponse">
+        <foreach collection="role" item="item" >
+            INSERT INTO employee_role(
+            employee_id,
+            service_id
+            )VALUES(
+            #{id},
+            #{item}
+            )RETURNING *;
+        </foreach>
+    </select>
+    <select id="get" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT service_id
+        FROM employee_role
+        WHERE employee_id = #{id}
+    </select>
+</mapper>
