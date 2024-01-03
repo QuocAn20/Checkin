@@ -6,12 +6,13 @@ import com.example.checkin.model.response.BaseResponse;
 import com.example.checkin.model.response.UserResponse;
 import com.example.checkin.service.IUserService;
 import com.google.common.base.Strings;
-import jakarta.security.auth.message.AuthException;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import javax.security.auth.message.AuthException;
 
 @Service
 public class UserServiceImpl implements IUserService {
