@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.checkin.mapper.MenuMapper">
+
+    <update id="update" parameterType="com.example.checkin.model.request.MenuRequest">
+        UPDATE menu
+        SET "name" = #{name},
+            path = #{path},
+            icon = #{icon}
+        WHERE id = #{id}::uuid
+    </update>
+    <delete id="delete" parameterType="com.example.checkin.model.request.MenuRequest">
+        DELETE FROM menu
+        WHERE id = #{id}::uuid
+    </delete>
+    <select id="get" parameterType="com.example.checkin.model.request.MenuRequest"
+            resultType="com.example.checkin.model.response.MenuResponse">
+        SELECT * FROM menu
+        <where>
+            <if test="name != null and name !=''">
+                and "name" ILIKE CONCAT('%' || #{name} || '%')
+            </if>
+        </where>
+
+        order by name ASC
+        <if test="limit > 0">
+            OFFSET (#{page} - 1) * #{limit} FETCH NEXT  #{limit} ROWS ONLY
+        </if>
+    </select>
+    <select id="checkPathExisted" parameterType="com.example.checkin.model.request.MenuRequest"
+            resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM menu
+        WHERE path = #{path}
+    </select>
+    <select id="getMenuByRole" parameterType="com.example.checkin.model.request.MenuRequest"
+            resultType="com.example.checkin.model.response.MenuResponse">
+        SELECT menu.* FROM menu
+        LEFT JOIN permission ON menu.id = permission.menu_id
+        <where>
+            <foreach collection="roleCode" item="item">
+                permission.role_code = #{item}
+            </foreach>
+        </where>
+        order by name ASC
+    </select>
+    <select id="countMenu" parameterType="com.example.checkin.model.request.MenuRequest"
+            resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM menu
+        <where>
+            <if test="name != null and name !=''">
+                and "name" ILIKE CONCAT('%' || #{name} || '%')
+            </if>
+        </where>
+    </select>
+    <select id="create" parameterType="com.example.checkin.model.request.MenuRequest"
+            resultType="com.example.checkin.model.response.MenuResponse">
+        INSERT INTO menu(
+            "name",
+            path,
+            icon,
+            creator
+        )VALUES(
+            #{name},
+            #{path},
+            #{icon},
+            #{creator}
+        ) RETURNING *
+    </select>
+</mapper>

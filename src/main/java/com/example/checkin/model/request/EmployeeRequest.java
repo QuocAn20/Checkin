@@ -1,5 +1,6 @@
 package com.example.checkin.model.request;
 
+import com.example.checkin.model.dto.Paging;
 import lombok.*;
 
 import java.io.BufferedReader;
@@ -16,7 +17,7 @@ import java.util.zip.GZIPOutputStream;
 @AllArgsConstructor
 @Getter
 @Setter
-public class EmployeeRequest {
+public class EmployeeRequest extends Paging {
     private String id;
     private String code;
     private String name;
@@ -36,7 +37,7 @@ public class EmployeeRequest {
     private List<String> role;
 
     //    create account
-    private  String accountId;
+    private String accountId;
     private String password;
     private String userName;
 
@@ -44,32 +45,16 @@ public class EmployeeRequest {
         return decompress(imgNationalIdFile);
     }
 
-    public void setImgNationalId(String imgNationalId) {
-        this.imgNationalId = imgNationalId;
-    }
-
     public byte[] getImgNationalIdFile() throws Exception {
         return compress(imgNationalId);
-    }
-
-    public void setImgNationalIdFile(byte[] imgNationalIdFile) {
-        this.imgNationalIdFile = imgNationalIdFile;
     }
 
     public String getImgProfile() throws Exception {
         return decompress(imgProfileFile);
     }
 
-    public void setImgProfile(String imgProfile) {
-        this.imgProfile = imgProfile;
-    }
-
     public byte[] getImgProfileFile() throws Exception {
         return compress(imgProfile);
-    }
-
-    public void setImgProfileFile(byte[] imgProfileFile) {
-        this.imgProfileFile = imgProfileFile;
     }
 
     public static byte[] compress(String str) throws Exception {

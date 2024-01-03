@@ -7,6 +7,7 @@ import com.example.checkin.model.request.EmployeeRequest;
 import com.example.checkin.model.response.BaseResponse;
 import com.example.checkin.model.response.EmployeeResponse;
 import com.example.checkin.model.response.UserResponse;
+import com.example.checkin.service.ICommonService;
 import com.example.checkin.service.IEmployeeService;
 import com.google.common.base.Strings;
 import org.mindrot.jbcrypt.BCrypt;
@@ -29,6 +30,9 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private ICommonService commonService;
+
     @Override
     public BaseResponse getEmployee(EmployeeRequest request) {
         try {
@@ -38,7 +42,6 @@ public class EmployeeServiceImpl implements IEmployeeService {
             } else {
                 result = mapper.getEmployee(request);
             }
-
 
             for (EmployeeResponse item : result) {
                 List<String> listRoleOfEmployee = roleMapper.get(item.getId());
@@ -53,6 +56,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
             }
 
         } catch (Exception e) {
+            e.fillInStackTrace();
             return new BaseResponse("1", "Failed");
         }
         return new BaseResponse("1", "Failed");
@@ -60,19 +64,18 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
     @Override
     public BaseResponse getAllEmployee(EmployeeRequest request) {
-        BaseResponse baseResponse = new BaseResponse();
         try {
             List<EmployeeResponse> result = mapper.getAll();
 
             if (!result.isEmpty()) {
-                baseResponse = new BaseResponse(result, "0", "Get Successfully");
+                return new BaseResponse(result, "0", "Get Successfully");
             }
 
         } catch (Exception e) {
-            baseResponse = new BaseResponse("1", "Failed");
-            return baseResponse;
+            e.fillInStackTrace();
+            return new BaseResponse("1", "Failed");
         }
-        return baseResponse;
+        return new BaseResponse("1", "Failed");
     }
 
     @Override
@@ -84,35 +87,29 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
             if (result > 0) {
                 EmployeeResponse roleResult = roleMapper.create(request);
-                baseResponse = new BaseResponse(request, "0", "Update Successfully");
-            } else {
-                baseResponse = new BaseResponse("1", "Update failure");
+                return new BaseResponse(request, "0", "Update Successfully");
             }
-
         } catch (Exception e) {
-            baseResponse = new BaseResponse("1", "Failed");
-            return baseResponse;
+            e.fillInStackTrace();
+            return new BaseResponse("1", "Failed");
         }
-        return baseResponse;
+        return new BaseResponse("1", "Failed");
     }
 
     @Override
     public BaseResponse deleteEmployee(EmployeeRequest request) {
-        BaseResponse baseResponse = new BaseResponse();
         try {
             int result = mapper.delete(request);
 
             if (result > 0) {
-                baseResponse = new BaseResponse(request, "0", "Delete Successfully");
-            } else {
-                baseResponse = new BaseResponse("1", "Delete failure");
+                return new BaseResponse(request, "0", "Delete Successfully");
             }
 
         } catch (Exception e) {
-            baseResponse = new BaseResponse("1", "Failed");
-            return baseResponse;
+            e.fillInStackTrace();
+            return new BaseResponse("1", "Failed");
         }
-        return baseResponse;
+        return new BaseResponse("1", "Failed");
     }
 
     @Override
@@ -140,7 +137,12 @@ public class EmployeeServiceImpl implements IEmployeeService {
                 return new BaseResponse("1", "Create failed");
             }
             request.setAccountId(account.getId());
-            request.setCode(String.valueOf(mapper.getId() + index));
+
+            String code = "EMP-";
+            int getId = mapper.getId() + index;
+            String pad = commonService.padLeft(String.valueOf(getId), 4, "0");
+            request.setCode(code + pad);
+
             EmployeeResponse result = mapper.create(request);
             if (result != null) {
                 request.setId(result.getId());
