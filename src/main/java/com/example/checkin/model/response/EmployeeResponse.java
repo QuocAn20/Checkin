@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class EmployeeResponse extends Paging{
+public class EmployeeResponse {
     private String id;
     private String code;
     private String name;

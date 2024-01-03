@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.checkin.mapper.PermissionMapper">
+
+    <select id="getPermission" parameterType="String" resultType="String">
+        SELECT role_code
+        FROM permission
+        WHERE menu_id = #{id}
+    </select>
+
+    <delete id="deletePermission" parameterType="String">
+        DELETE FROM permission
+        WHERE menu_id = #{id}::uuid
+    </delete>
+
+    <insert id="createPermission">
+        <foreach collection="roleCode" item="item">
+            INSERT INTO permission (
+                menu_id,
+                role_code
+            )VALUES(
+                #{id},
+                #{item}
+            )RETURNING *;
+        </foreach>
+    </insert>
+</mapper>

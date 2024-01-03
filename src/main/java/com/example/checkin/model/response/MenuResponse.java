@@ -4,17 +4,17 @@ import com.example.checkin.model.dto.Paging;
 import lombok.*;
 
 import java.util.List;
-import java.util.Map;
 
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Getter
 @Setter
-public class UserResponse {
+public class MenuResponse {
     private String id;
     private String name;
-    private String userName;
-    private String password;
-    private String role;
+    private String path;
+    private String icon;
+    private String creator;
+    private List<String> roleCode;
 }
