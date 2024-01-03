@@ -85,6 +85,7 @@ public class MenuServiceImpl implements IMenuService {
 
     @Override
     public BaseResponse createMenu(MenuRequest request) {
+        int index = 0;
         try{
             if(Strings.isNullOrEmpty(request.getName()) ||
                     Strings.isNullOrEmpty(request.getPath()) ||
@@ -98,8 +99,10 @@ public class MenuServiceImpl implements IMenuService {
                 return new BaseResponse("1", "Path has been existed");
             }
 
-            MenuResponse result = mapper.create(request);
+            int getNumerate = mapper.getNumerate() + index;
+            request.setNumerate(getNumerate);
 
+            MenuResponse result = mapper.create(request);
             if(result != null){
                 permissionMapper.createPermission(result.getId(), request.getRoleCode());
 

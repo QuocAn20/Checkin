@@ -22,7 +22,7 @@
             </if>
         </where>
 
-        order by name ASC
+        order by numerate ASC
         <if test="limit > 0">
             OFFSET (#{page} - 1) * #{limit} FETCH NEXT  #{limit} ROWS ONLY
         </if>
@@ -41,7 +41,7 @@
                 permission.role_code = #{item}
             </foreach>
         </where>
-        order by name ASC
+        order by numerate ASC
     </select>
     <select id="countMenu" parameterType="com.example.checkin.model.request.MenuRequest"
             resultType="java.lang.Integer">
@@ -65,5 +65,8 @@
             #{icon},
             #{creator}
         ) RETURNING *
+    </select>
+    <select id="getNumerate" resultType="java.lang.Integer">
+        SELECT COUNT(*) + 1 FROM menu
     </select>
 </mapper>
