@@ -3,7 +3,8 @@ package com.example.checkin.service;
 import com.example.checkin.model.request.UserRequest;
 import com.example.checkin.model.response.BaseResponse;
 import com.example.checkin.model.response.UserResponse;
-import jakarta.security.auth.message.AuthException;
+
+import javax.security.auth.message.AuthException;
 
 public interface IUserService {
     BaseResponse createUser(UserRequest request);

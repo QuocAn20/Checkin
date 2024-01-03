@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,45 +31,44 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
     @Override
     public BaseResponse getEmployee(EmployeeRequest request) {
-        BaseResponse baseResponse = new BaseResponse();
-        try{
-            List<EmployeeResponse> result;
-            if(request.getRole() != null){
+        try {
+            List<EmployeeResponse> result = new ArrayList<>();
+            if (request.getRole() != null) {
                 result = mapper.getEmployeeByRole(request);
-            }else {
+            } else {
                 result = mapper.getEmployee(request);
             }
 
-            for(EmployeeResponse item : result){
+
+            for (EmployeeResponse item : result) {
                 List<String> listRoleOfEmployee = roleMapper.get(item.getId());
-                if(listRoleOfEmployee != null){
+                if (listRoleOfEmployee != null) {
                     item.setRole(listRoleOfEmployee);
                 }
             }
             int count = mapper.countEmployee(request);
 
-            if(result.size() >= 0) {
-                baseResponse = new BaseResponse(result, count, "0", "Get Successfully");
+            if (!result.isEmpty()) {
+                return new BaseResponse(result, count, "0", "Get Successfully");
             }
 
-        }catch (Exception e){
-            baseResponse = new BaseResponse("1", "Failed");
-            return baseResponse;
+        } catch (Exception e) {
+            return new BaseResponse("1", "Failed");
         }
-        return baseResponse;
+        return new BaseResponse("1", "Failed");
     }
 
     @Override
     public BaseResponse getAllEmployee(EmployeeRequest request) {
         BaseResponse baseResponse = new BaseResponse();
-        try{
+        try {
             List<EmployeeResponse> result = mapper.getAll();
 
-            if(result.size() > 0) {
+            if (!result.isEmpty()) {
                 baseResponse = new BaseResponse(result, "0", "Get Successfully");
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             baseResponse = new BaseResponse("1", "Failed");
             return baseResponse;
         }
@@ -78,18 +78,18 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Override
     public BaseResponse updateEmployee(EmployeeRequest request) {
         BaseResponse baseResponse = new BaseResponse();
-        try{
+        try {
             int deleteOldRole = roleMapper.delete(request.getId());
             int result = mapper.update(request);
 
-            if(result > 0) {
+            if (result > 0) {
                 EmployeeResponse roleResult = roleMapper.create(request);
                 baseResponse = new BaseResponse(request, "0", "Update Successfully");
-            }else {
+            } else {
                 baseResponse = new BaseResponse("1", "Update failure");
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             baseResponse = new BaseResponse("1", "Failed");
             return baseResponse;
         }
@@ -99,16 +99,16 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Override
     public BaseResponse deleteEmployee(EmployeeRequest request) {
         BaseResponse baseResponse = new BaseResponse();
-        try{
+        try {
             int result = mapper.delete(request);
 
-            if(result > 0) {
+            if (result > 0) {
                 baseResponse = new BaseResponse(request, "0", "Delete Successfully");
-            }else {
+            } else {
                 baseResponse = new BaseResponse("1", "Delete failure");
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             baseResponse = new BaseResponse("1", "Failed");
             return baseResponse;
         }
@@ -117,9 +117,8 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
     @Override
     public BaseResponse createEmployee(EmployeeRequest request) {
-        BaseResponse baseResponse = new BaseResponse();
         int index = 0;
-        try{
+        try {
             if (request == null || Strings.isNullOrEmpty(request.getName())
                     || Strings.isNullOrEmpty(request.getUserName())
                     || Strings.isNullOrEmpty(request.getPassword())) {
@@ -127,8 +126,8 @@ public class EmployeeServiceImpl implements IEmployeeService {
                         "Fiels is requried");
             }
 
-            UserResponse checkUsernameExistion = userMapper.checkUsernameExistion(request.getUserName());
-            if(checkUsernameExistion != null) {
+            UserResponse checkUsernameExist = userMapper.checkUsernameExistion(request.getUserName());
+            if (checkUsernameExist != null) {
                 return new BaseResponse("1", "Username already in use");
             }
 
@@ -137,31 +136,24 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
             UserResponse account = userMapper.createEmployeeAccount(request);
 
-            if(account != null) {
-                request.setAccountId(account.getId());
-            }else {
+            if (account == null) {
                 return new BaseResponse("1", "Create failed");
             }
-
+            request.setAccountId(account.getId());
             request.setCode(String.valueOf(mapper.getId() + index));
-
             EmployeeResponse result = mapper.create(request);
-            if(result != null) {
+            if (result != null) {
                 request.setId(result.getId());
                 EmployeeResponse roleResult = roleMapper.create(request);
                 if (roleResult != null) {
-                    baseResponse = new BaseResponse(request, "0", "Create Successfully");
-                } else {
-                    baseResponse = new BaseResponse("1", "Create failure");
+                    return new BaseResponse(request, "0", "Create Successfully");
                 }
-            }else {
-                return new BaseResponse("1", "create failure");
             }
 
-        }catch (Exception e){
-            baseResponse = new BaseResponse("1", "Failed");
-            return baseResponse;
+        } catch (Exception e) {
+            e.fillInStackTrace();
+            return new BaseResponse("1", "Failed");
         }
-        return baseResponse;
+        return new BaseResponse("1", "Failed");
     }
 }

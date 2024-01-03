@@ -3,15 +3,15 @@ package com.example.checkin.controller;
 import com.example.checkin.contant.Constants;
 import com.example.checkin.model.response.UserResponse;
 import com.example.checkin.service.IUserService;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import jakarta.security.auth.message.AuthException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import io.jsonwebtoken.Jwts;
 
+import javax.security.auth.message.AuthException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +38,7 @@ public class AuthController {
         if(response == null) {
             Map<String, Object> map = new HashMap<>();;
             map.put("response", response);
+
             return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST );
         }
         return new ResponseEntity<>(generateJWTToken(response), HttpStatus.OK);

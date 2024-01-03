@@ -42,7 +42,8 @@
             job,
             email,
             "imgProfile",
-            status
+            status,
+            account_id
         )VALUES (
             #{code},
             #{name},
@@ -57,7 +58,8 @@
             #{job},
             #{email},
             #{imgProfileFile},
-            #{status}
+            #{status},
+            #{accountId}
         ) RETURNING *;
     </select>
     <select id="getEmployee" parameterType="com.example.checkin.model.request.EmployeeRequest"
