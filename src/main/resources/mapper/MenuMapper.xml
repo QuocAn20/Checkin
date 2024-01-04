@@ -6,7 +6,9 @@
         UPDATE menu
         SET "name" = #{name},
             path = #{path},
-            icon = #{icon}
+            icon = #{icon},
+            numerate = #{numerate},
+            parent_id = #{parentId}
         WHERE id = #{id}::uuid
     </update>
     <delete id="delete" parameterType="com.example.checkin.model.request.MenuRequest">
@@ -15,7 +17,9 @@
     </delete>
     <select id="get" parameterType="com.example.checkin.model.request.MenuRequest"
             resultType="com.example.checkin.model.response.MenuResponse">
-        SELECT * FROM menu
+        SELECT menu.*, user_account.name AS creatorName
+        FROM menu
+        LEFT JOIN user_account ON menu.creator::uuid = user_account.id
         <where>
             <if test="name != null and name !=''">
                 and "name" ILIKE CONCAT('%' || #{name} || '%')
@@ -34,8 +38,10 @@
     </select>
     <select id="getMenuByRole" parameterType="com.example.checkin.model.request.MenuRequest"
             resultType="com.example.checkin.model.response.MenuResponse">
-        SELECT menu.* FROM menu
+        SELECT menu.*, user_account.name AS creatorName
+        FROM menu
         LEFT JOIN permission ON menu.id = permission.menu_id
+        LEFT JOIN user_account ON menu.creator::uuid = user_account.id
         <where>
             <foreach collection="roleCode" item="item">
                 permission.role_code = #{item}
@@ -58,15 +64,16 @@
             "name",
             path,
             icon,
-            creator
+            creator,
+            numerate,
+            parent_id
         )VALUES(
             #{name},
             #{path},
             #{icon},
-            #{creator}
+            #{creator},
+            #{numerate},
+            #{parentId}
         ) RETURNING *
-    </select>
-    <select id="getNumerate" resultType="java.lang.Integer">
-        SELECT COUNT(*) + 1 FROM menu
     </select>
 </mapper>

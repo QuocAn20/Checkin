@@ -17,6 +17,7 @@ public class MenuRequest extends Paging {
     private String path;
     private String icon;
     private String creator;
+    private String parentId;
     private int numerate;
     private List<String> roleCode;
 }

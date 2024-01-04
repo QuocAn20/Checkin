@@ -21,6 +21,4 @@ public interface MenuMapper {
     int delete(MenuRequest request);
 
     int checkPathExisted(MenuRequest request);
-
-    int getNumerate();
 }
