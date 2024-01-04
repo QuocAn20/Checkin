@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.checkin.mapper.RoomMapper">
+    <update id="update" parameterType="com.example.checkin.model.request.RoomRequest">
+        UPDATE room
+        SET
+            room = #{room},
+            branch = #{branch},
+            note = #{note},
+            status = #{status}
+        WHERE id = #{id}::uuid
+    </update>
+
+    <select id="get" parameterType="com.example.checkin.model.request.RoomRequest"
+            resultType="com.example.checkin.model.response.RoomResponse">
+        SELECT *
+        FROM room
+        <where>
+            <if test="room != null and room !=''">
+                and "room" ILIKE CONCAT('%' || #{room} || '%')
+            </if>
+        </where>
+
+        order by room ASC
+        <if test="limit > 0">
+            OFFSET (#{page} - 1) * #{limit} FETCH NEXT  #{limit} ROWS ONLY
+        </if>
+    </select>
+    <select id="create" parameterType="com.example.checkin.model.request.RoomRequest"
+            resultType="com.example.checkin.model.response.RoomResponse">
+        INSERT INTO room(
+            room,
+            branch,
+            note,
+            status
+        )VALUES (
+            #{room},
+            #{branch},
+            #{note},
+            #{status}
+        ) RETURNING *;
+    </select>
+    <select id="countRoom" parameterType="com.example.checkin.model.request.RoomRequest"
+            resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM room
+        <where>
+            <if test="room != null and room !=''">
+                and "room" ILIKE CONCAT('%' || #{room} || '%')
+            </if>
+        </where>
+    </select>
+    <select id="getCode" resultType="java.lang.Integer">
+        SELECT COUNT(*) + 1 FROM room
+    </select>
+    <select id="getAll" resultType="com.example.checkin.model.response.RoomResponse">
+        SELECT * FROM room
+    </select>
+</mapper>

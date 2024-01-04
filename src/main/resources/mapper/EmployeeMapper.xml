@@ -4,7 +4,6 @@
     <update id="update" parameterType="com.example.checkin.model.request.EmployeeRequest">
         UPDATE employee
         SET
-            code = #{code},
             name = #{name},
             dob = #{dob},
             gender = #{gender},
@@ -17,8 +16,7 @@
             job = #{job},
             email = #{email},
             "imgProfile" = #{imgProfileFile},
-            status = #{status},
-            account_id = #{accountId}
+            status = #{status}
         WHERE id = #{id}::uuid
     </update>
     <delete id="delete" parameterType="com.example.checkin.model.request.EmployeeRequest">

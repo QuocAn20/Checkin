@@ -1,6 +1,5 @@
 package com.example.checkin.model.response;
 
-import com.example.checkin.model.dto.Paging;
 import lombok.*;
 
 import java.util.Date;

@@ -1,7 +1,6 @@
 package com.example.checkin.service.Impl;
 
 import com.example.checkin.mapper.EmployeeMapper;
-import com.example.checkin.mapper.RoleMapper;
 import com.example.checkin.mapper.UserMapper;
 import com.example.checkin.model.request.EmployeeRequest;
 import com.example.checkin.model.response.BaseResponse;
@@ -25,9 +24,6 @@ public class EmployeeServiceImpl implements IEmployeeService {
     private EmployeeMapper mapper;
 
     @Autowired
-    private RoleMapper roleMapper;
-
-    @Autowired
     private UserMapper userMapper;
 
     @Autowired
@@ -43,12 +39,6 @@ public class EmployeeServiceImpl implements IEmployeeService {
                 result = mapper.getEmployee(request);
             }
 
-            for (EmployeeResponse item : result) {
-                List<String> listRoleOfEmployee = roleMapper.get(item.getId());
-                if (listRoleOfEmployee != null) {
-                    item.setRole(listRoleOfEmployee);
-                }
-            }
             int count = mapper.countEmployee(request);
 
             if (!result.isEmpty()) {
@@ -80,13 +70,10 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
     @Override
     public BaseResponse updateEmployee(EmployeeRequest request) {
-        BaseResponse baseResponse = new BaseResponse();
         try {
-            int deleteOldRole = roleMapper.delete(request.getId());
             int result = mapper.update(request);
 
             if (result > 0) {
-                EmployeeResponse roleResult = roleMapper.create(request);
                 return new BaseResponse(request, "0", "Update Successfully");
             }
         } catch (Exception e) {
@@ -146,10 +133,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
             EmployeeResponse result = mapper.create(request);
             if (result != null) {
                 request.setId(result.getId());
-                EmployeeResponse roleResult = roleMapper.create(request);
-                if (roleResult != null) {
-                    return new BaseResponse(request, "0", "Create Successfully");
-                }
+                return new BaseResponse(request, "0", "Create Successfully");
             }
 
         } catch (Exception e) {
