@@ -7,8 +7,6 @@ import com.example.checkin.model.response.BaseResponse;
 public interface IRoomService {
     BaseResponse getRoom(RoomRequest request);
 
-    BaseResponse getAllRoom(RoomRequest request);
-
     BaseResponse updateRoom(RoomRequest request);
 
     BaseResponse createRoom(RoomRequest request);

@@ -22,11 +22,6 @@ public class RoomController {
         return new ResponseEntity<>(roomService.getRoom(request), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/getAllRoom", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> getAllRoom(@RequestBody RoomRequest request){
-        return new ResponseEntity<>(roomService.getAllRoom(request), HttpStatus.OK);
-    }
-
     @PostMapping(value = "/createRoom", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> createRoom(@RequestBody RoomRequest request){
         return new ResponseEntity<>(roomService.createRoom(request), HttpStatus.OK);
