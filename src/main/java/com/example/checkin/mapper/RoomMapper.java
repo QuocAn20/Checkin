@@ -11,8 +11,6 @@ import java.util.List;
 public interface RoomMapper {
     List<RoomResponse> get(RoomRequest request);
 
-    List<RoomResponse> getAll();
-
     RoomResponse create(RoomRequest request);
     int countRoom(RoomRequest request);
 

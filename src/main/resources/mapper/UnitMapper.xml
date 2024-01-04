@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.checkin.mapper.UnitMapper">
+    <update id="update" parameterType="com.example.checkin.model.request.UnitRequest">
+        UPDATE unit
+        SET
+            unit = #{unit},
+            branch = #{branch},
+            note = #{note},
+            status = #{status}
+        WHERE id = #{id}::uuid
+    </update>
+
+    <select id="get" parameterType="com.example.checkin.model.request.UnitRequest"
+            resultType="com.example.checkin.model.response.UnitResponse">
+        SELECT *
+        FROM unit
+        <where>
+            <if test="unit != null and unit !=''">
+                and "unit" ILIKE CONCAT('%' || #{unit} || '%')
+            </if>
+        </where>
+
+        order by code ASC
+        <if test="limit > 0">
+            OFFSET (#{page} - 1) * #{limit} FETCH NEXT  #{limit} ROWS ONLY
+        </if>
+    </select>
+    <select id="create" parameterType="com.example.checkin.model.request.UnitRequest"
+            resultType="com.example.checkin.model.response.UnitResponse">
+        INSERT INTO unit(
+            code,
+            unit,
+            branch,
+            note,
+            status
+        )VALUES (
+            #{code},
+            #{unit},
+            #{branch},
+            #{note},
+            #{status}
+        ) RETURNING *;
+    </select>
+    <select id="countUnit" parameterType="com.example.checkin.model.request.UnitRequest"
+            resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM unit
+        <where>
+            <if test="unit != null and unit !=''">
+                and "unit" ILIKE CONCAT('%' || #{unit} || '%')
+            </if>
+        </where>
+    </select>
+    <select id="getCode" resultType="java.lang.Integer">
+        SELECT COUNT(*) + 1 FROM unit
+    </select>
+</mapper>

@@ -21,7 +21,7 @@
             </if>
         </where>
 
-        order by room ASC
+        order by code ASC
         <if test="limit > 0">
             OFFSET (#{page} - 1) * #{limit} FETCH NEXT  #{limit} ROWS ONLY
         </if>
@@ -29,11 +29,13 @@
     <select id="create" parameterType="com.example.checkin.model.request.RoomRequest"
             resultType="com.example.checkin.model.response.RoomResponse">
         INSERT INTO room(
+            code,
             room,
             branch,
             note,
             status
         )VALUES (
+            #{code},
             #{room},
             #{branch},
             #{note},
@@ -51,8 +53,5 @@
     </select>
     <select id="getCode" resultType="java.lang.Integer">
         SELECT COUNT(*) + 1 FROM room
-    </select>
-    <select id="getAll" resultType="com.example.checkin.model.response.RoomResponse">
-        SELECT * FROM room
     </select>
 </mapper>
