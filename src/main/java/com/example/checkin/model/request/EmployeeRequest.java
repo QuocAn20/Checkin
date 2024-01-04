@@ -35,11 +35,13 @@ public class EmployeeRequest extends Paging {
     private String imgProfile;
     private byte[] imgProfileFile;
     private List<String> role;
+    private String status;
 
     //    create account
     private String accountId;
     private String password;
     private String userName;
+    private String roleCode;
 
     public String getImgNationalId() throws Exception {
         return decompress(imgNationalIdFile);
