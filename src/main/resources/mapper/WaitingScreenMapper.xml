@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.checkin.mapper.WaitingScreenMapper">
+    <update id="update" parameterType="com.example.checkin.model.request.WaitingScreenRequest">
+        UPDATE waiting_screen
+        SET
+            show_type = #{showType},
+            content = #{contentFileByte},
+            notification = #{notification},
+            note = #{note},
+            status = #{status}
+        WHERE id = #{id}::uuid
+    </update>
+    <update id="updateStatus" parameterType="com.example.checkin.model.request.WaitingScreenRequest">
+        UPDATE waiting_screen
+        SET
+            status = 'Random'
+        WHERE
+            status = 'Default'
+    </update>
+
+    <select id="get" parameterType="com.example.checkin.model.request.WaitingScreenRequest"
+            resultType="com.example.checkin.model.response.WaitingScreenResponse">
+        SELECT *, content AS contentFileByte
+        FROM waiting_screen
+        <where>
+            <if test="showType != null and showType !=''">
+                and "show_type" ILIKE CONCAT('%' || #{showType} || '%')
+            </if>
+        </where>
+
+        order by code ASC
+        <if test="limit > 0">
+            OFFSET (#{page} - 1) * #{limit} FETCH NEXT  #{limit} ROWS ONLY
+        </if>
+    </select>
+    <select id="create" parameterType="com.example.checkin.model.request.WaitingScreenRequest"
+            resultType="com.example.checkin.model.response.WaitingScreenResponse">
+        INSERT INTO waiting_screen(
+            code,
+            show_type,
+            content,
+            notification,
+            note,
+            status
+        )VALUES (
+            #{code},
+            #{showType},
+            #{contentFileByte},
+            #{notification},
+            #{note},
+            #{status}
+        ) RETURNING *;
+    </select>
+    <select id="countWScreen" parameterType="com.example.checkin.model.request.WaitingScreenRequest"
+            resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM waiting_screen
+        <where>
+            <if test="showType != null and showType !=''">
+                and "show_type" ILIKE CONCAT('%' || #{showType} || '%')
+            </if>
+        </where>
+    </select>
+    <select id="getCode" resultType="java.lang.Integer">
+        SELECT COUNT(*) + 1 FROM waiting_screen
+    </select>
+</mapper>

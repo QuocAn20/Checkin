@@ -2,18 +2,19 @@ package com.example.checkin.model.request;
 
 import com.example.checkin.model.dto.Paging;
 import lombok.*;
-import org.hibernate.type.StringNVarcharType;
 
+@Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class RoomRequest extends Paging {
+public class NotificationRequest extends Paging {
     private String id;
-    private String name;
     private String code;
-    private String branch;
-    private String note;
+    private String notiType;
+    private String content;
+    private String object;
+    private String notiPlace;
     private String status;
+    private String note;
 }

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.checkin.mapper.EventMapper">
+    <update id="update" parameterType="com.example.checkin.model.request.EventRequest">
+        UPDATE event
+        SET
+            name = #{name},
+            start_date = #{startDate},
+            start_time = #{startTime},
+            end_date = #{endDate},
+            end_time = #{endTime},
+            note = #{note},
+            status = #{status}
+        WHERE id = #{id}::uuid
+    </update>
+
+    <select id="get" parameterType="com.example.checkin.model.request.EventRequest"
+            resultType="com.example.checkin.model.response.EventResponse">
+        SELECT *
+        FROM event
+        <where>
+            <if test="name != null and name !=''">
+                and "name" ILIKE CONCAT('%' || #{name} || '%')
+            </if>
+            <if test="status != null and status !=''">
+                and "status" = #{status}
+            </if>
+            <if test="startDate != null and startDate !=''">
+                and "start_date" = #{startDate}
+            </if>
+            <if test="endDate != null and endDate !=''">
+                and "end_date" = #{endDate}
+            </if>
+            <if test="startTime != null and startTime !=''">
+                and "start_time" = #{startTime}
+            </if>
+            <if test="endTime != null and endTime !=''">
+                and "end_time" = #{endTime}
+            </if>
+        </where>
+
+        order by code ASC
+        <if test="limit > 0">
+            OFFSET (#{page} - 1) * #{limit} FETCH NEXT  #{limit} ROWS ONLY
+        </if>
+    </select>
+    <select id="create" parameterType="com.example.checkin.model.request.EventRequest"
+            resultType="com.example.checkin.model.response.EventResponse">
+        INSERT INTO event(
+            code,
+            name,
+            start_date,
+            start_time,
+            end_date,
+            end_time,
+            note,
+            status
+        )VALUES (
+            #{code},
+            #{name},
+            #{startDate},
+            #{startTime},
+            #{endDate},
+            #{endTime},
+            #{note},
+            #{status}
+        ) RETURNING *;
+    </select>
+    <select id="countEvent" parameterType="com.example.checkin.model.request.EventRequest"
+            resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM event
+        <where>
+            <if test="name != null and name !=''">
+                and "name" ILIKE CONCAT('%' || #{name} || '%')
+            </if>
+        </where>
+    </select>
+    <select id="getCode" resultType="java.lang.Integer">
+        SELECT COUNT(*) + 1 FROM event
+    </select>
+</mapper>

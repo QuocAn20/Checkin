@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.checkin.mapper.CheckInOutMapper">
+    <update id="updateCheckOut" parameterType="string">
+        UPDATE check_in_out
+        SET
+            check_out = NOW()
+        WHERE id = #{id}::uuid
+    </update>
+
+    <update id="updateTime" parameterType="string">
+        UPDATE check_in_out
+        SET
+            work_time = check_out - check_in,
+            late = check_in - '08:30:00'::time,
+            soon = '17:30:00'::time - check_out,
+            status = #{status}
+        WHERE id = #{id}::uuid;
+    </update>
+
+    <select id="getCheckOutById" parameterType="com.example.checkin.model.request.CheckInOutRequest"
+            resultType="com.example.checkin.model.response.CheckInOutResponse">
+        SELECT *
+        FROM check_in_out
+        WHERE TO_CHAR("date", 'yyyy-mm-dd') = #{date} AND employee_id = #{employeeId}::uuid
+    </select>
+
+    <select id="get" parameterType="com.example.checkin.model.request.CheckInOutRequest"
+            resultType="com.example.checkin.model.response.CheckInOutResponse">
+        SELECT check_in_out.*,
+                employee.code AS code,
+                employee.name AS name,
+                employee.room AS room,
+                employee.unit AS unit,
+                check_out - check_in AS work_time,
+                check_in - '08:30:00' AS late,
+                '17:30:00' - check_out AS soon
+        FROM check_in_out
+        LEFT JOIN employee ON check_in_out.employee_id = employee.id
+        <where>
+            <if test="room != null and room !=''">
+                and "room" ILIKE CONCAT('%' || #{room} || '%')
+            </if>
+            <if test="date != null and date !=''">
+                and "date" ILIKE CONCAT('%' || #{date} || '%')
+            </if>
+            <if test="unit != null and unit !=''">
+                and "unit" ILIKE CONCAT('%' || #{unit} || '%')
+            </if>
+            <if test="status != null and status !=''">
+                and "status" ILIKE CONCAT('%' || #{status} || '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="create" parameterType="com.example.checkin.model.request.CheckInOutRequest"
+            resultType="com.example.checkin.model.response.CheckInOutResponse">
+        INSERT INTO check_in_out(
+            date,
+            check_in,
+            status,
+            employee_id
+        )VALUES (
+            NOW(),
+            NOW(),
+            #{status},
+            #{employeeId}
+        ) RETURNING *;
+    </select>
+
+    <select id="countCheckInOut" parameterType="com.example.checkin.model.request.CheckInOutRequest"
+            resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM check_in_out
+        <where>
+            <if test="checkIn != null and checkIn !=''">
+                and "check_in" ILIKE CONCAT('%' || #{checkIn} || '%')
+            </if>
+        </where>
+    </select>
+</mapper>

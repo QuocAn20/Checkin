@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.checkin.mapper.NotificationMapper">
+    <update id="update" parameterType="com.example.checkin.model.request.NotificationRequest">
+        UPDATE notification
+        SET
+            noti_type = #{notiType},
+            content = #{content},
+            object = #{object},
+            noti_place = #{notiPlace},
+            note = #{note},
+            status = #{status}
+        WHERE id = #{id}::uuid
+    </update>
+
+    <select id="get" parameterType="com.example.checkin.model.request.NotificationRequest"
+            resultType="com.example.checkin.model.response.NotificationResponse">
+        SELECT *
+        FROM notification
+        <where>
+            <if test="notiType != null and notiType !=''">
+                and "noti_type" ILIKE CONCAT('%' || #{notiType} || '%')
+            </if>
+            <if test="content != null and content !=''">
+                and "content" ILIKE CONCAT('%' || #{content} || '%')
+            </if>
+            <if test="object != null and object !=''">
+                and "object" ILIKE CONCAT('%' || #{object} || '%')
+            </if>
+        </where>
+
+        order by code ASC
+        <if test="limit > 0">
+            OFFSET (#{page} - 1) * #{limit} FETCH NEXT  #{limit} ROWS ONLY
+        </if>
+    </select>
+    <select id="create" parameterType="com.example.checkin.model.request.NotificationRequest"
+            resultType="com.example.checkin.model.response.NotificationResponse">
+        INSERT INTO notification(
+            code,
+            noti_type,
+            content,
+            object,
+            noti_place,
+            note,
+            status
+        )VALUES (
+            #{code},
+            #{notiType},
+            #{content},
+            #{object},
+            #{notiPlace},
+            #{note},
+            #{status}
+        ) RETURNING *;
+    </select>
+    <select id="countNotification" parameterType="com.example.checkin.model.request.NotificationRequest"
+            resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM notification
+        <where>
+            <if test="notiType != null and notiType !=''">
+                and "noti_type" ILIKE CONCAT('%' || #{notiType} || '%')
+            </if>
+        </where>
+    </select>
+    <select id="getCode" resultType="java.lang.Integer">
+        SELECT COUNT(*) + 1 FROM notification
+    </select>
+</mapper>
