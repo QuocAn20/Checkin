@@ -21,7 +21,7 @@ public class EmployeeRequest extends Paging {
     private String id;
     private String code;
     private String name;
-    private Date dob;
+    private String dob;
     private String gender;
     private String phone;
     private String nationalId;
