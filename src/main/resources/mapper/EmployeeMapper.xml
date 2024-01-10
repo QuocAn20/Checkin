@@ -148,4 +148,8 @@
     <select id="getId" resultType="java.lang.Integer">
         SELECT COUNT(*) + 1 FROM employee
     </select>
+    <select id="getEmployeeIdByAccountId" resultType="string">
+        SELECT id FROM employee
+        WHERE account_id = #{accountId}
+    </select>
 </mapper>

@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.checkin.mapper.RoomMapper">
-    <update id="update" parameterType="com.example.checkin.model.request.RoomRequest">
-        UPDATE room
+<mapper namespace="com.example.checkin.mapper.HolidayMapper">
+    <update id="update" parameterType="com.example.checkin.model.request.HolidayRequest">
+        UPDATE holiday
         SET
             name = #{name},
-            branch = #{branch},
+            date = #{date},
             note = #{note},
             status = #{status}
         WHERE id = #{id}::uuid
     </update>
 
-    <select id="get" parameterType="com.example.checkin.model.request.RoomRequest"
-            resultType="com.example.checkin.model.response.RoomResponse">
+    <select id="get" parameterType="com.example.checkin.model.request.HolidayRequest"
+            resultType="com.example.checkin.model.response.HolidayResponse">
         SELECT *
-        FROM room
+        FROM holiday
         <where>
             <if test="name != null and name !=''">
                 and "name" ILIKE CONCAT('%' || #{name} || '%')
             </if>
-            <if test="branch != null and branch !=''">
-                and "branch" ILIKE CONCAT('%' || #{branch} || '%')
+            <if test="status != null and status !=''">
+                and "status" = #{status}
+            </if>
+            <if test="date != null and date !=''">
+                and "date" = #{date}
             </if>
         </where>
 
@@ -29,25 +32,25 @@
             OFFSET (#{page} - 1) * #{limit} FETCH NEXT  #{limit} ROWS ONLY
         </if>
     </select>
-    <select id="create" parameterType="com.example.checkin.model.request.RoomRequest"
-            resultType="com.example.checkin.model.response.RoomResponse">
-        INSERT INTO room(
+    <select id="create" parameterType="com.example.checkin.model.request.HolidayRequest"
+            resultType="com.example.checkin.model.response.HolidayResponse">
+        INSERT INTO holiday(
             code,
             name,
-            branch,
+            date,
             note,
             status
         )VALUES (
             #{code},
             #{name},
-            #{branch},
+            #{date},
             #{note},
             #{status}
         ) RETURNING *;
     </select>
-    <select id="countRoom" parameterType="com.example.checkin.model.request.RoomRequest"
+    <select id="countHoliday" parameterType="com.example.checkin.model.request.HolidayRequest"
             resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM room
+        SELECT COUNT(*) FROM holiday
         <where>
             <if test="name != null and name !=''">
                 and "name" ILIKE CONCAT('%' || #{name} || '%')
@@ -55,6 +58,6 @@
         </where>
     </select>
     <select id="getCode" resultType="java.lang.Integer">
-        SELECT COUNT(*) + 1 FROM room
+        SELECT COUNT(*) + 1 FROM holiday
     </select>
 </mapper>

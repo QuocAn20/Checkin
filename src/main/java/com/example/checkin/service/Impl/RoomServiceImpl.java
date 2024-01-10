@@ -44,9 +44,9 @@ public class RoomServiceImpl implements IRoomService {
             int result = mapper.update(request);
 
             if(result > 0){
-                return new BaseResponse(result, "0", "create successfully");
+                return new BaseResponse(result, "0", "update successfully");
             }else {
-                return new BaseResponse("1", "create fail");
+                return new BaseResponse("1", "update fail");
             }
         }catch (Exception e){
             return new BaseResponse("-1", "fail");

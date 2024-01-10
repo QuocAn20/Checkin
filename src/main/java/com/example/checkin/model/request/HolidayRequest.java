@@ -1,17 +1,19 @@
-package com.example.checkin.model.response;
+package com.example.checkin.model.request;
 
+import com.example.checkin.model.dto.Paging;
 import lombok.*;
 
+import java.util.Date;
 @Getter
 @Setter
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UnitResponse {
+public class HolidayRequest extends Paging {
     private String id;
     private String name;
     private String code;
-    private String branch;
+    private String date;
     private String note;
     private String status;
 }

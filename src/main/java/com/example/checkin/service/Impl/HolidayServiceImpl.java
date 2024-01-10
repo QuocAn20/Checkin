@@ -1,33 +1,33 @@
 package com.example.checkin.service.Impl;
 
-import com.example.checkin.mapper.UnitMapper;
-import com.example.checkin.model.request.UnitRequest;
+import com.example.checkin.mapper.HolidayMapper;
+import com.example.checkin.model.request.HolidayRequest;
 import com.example.checkin.model.response.BaseResponse;
-import com.example.checkin.model.response.UnitResponse;
+import com.example.checkin.model.response.HolidayResponse;
 import com.example.checkin.service.ICommonService;
-import com.example.checkin.service.IUnitService;
+import com.example.checkin.service.IHolidayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UnitServiceImpl implements IUnitService {
+public class HolidayServiceImpl implements IHolidayService {
 
     @Autowired
-    private UnitMapper mapper;
+    private HolidayMapper mapper;
 
     @Autowired
     private ICommonService commonService;
 
     @Override
-    public BaseResponse getUnit(UnitRequest request) {
+    public BaseResponse getHoliday(HolidayRequest request) {
         try{
-            List<UnitResponse> result = mapper.get(request);
-            int countUnit = mapper.countUnit(request);
+            List<HolidayResponse> result = mapper.get(request);
+            int countHoliday = mapper.countHoliday(request);
 
             if(!result.isEmpty()){
-                return new BaseResponse(result, countUnit, "0", "get successfully");
+                return new BaseResponse(result, countHoliday, "0", "get successfully");
             }else {
                 return new BaseResponse("1", "get fail");
             }
@@ -37,7 +37,7 @@ public class UnitServiceImpl implements IUnitService {
     }
 
     @Override
-    public BaseResponse updateUnit(UnitRequest request) {
+    public BaseResponse updateHoliday(HolidayRequest request) {
         try{
             int result = mapper.update(request);
 
@@ -52,15 +52,15 @@ public class UnitServiceImpl implements IUnitService {
     }
 
     @Override
-    public BaseResponse createUnit(UnitRequest request) {
+    public BaseResponse createHoliday(HolidayRequest request) {
         int index = 0;
         try{
-            String code = "U-";
+            String code = "H-";
             int getCode = mapper.getCode() + index;
             String pad = commonService.padLeft(String.valueOf(getCode), 4, "0");
             request.setCode(code + pad);
 
-            UnitResponse result = mapper.create(request);
+            HolidayResponse result = mapper.create(request);
 
             if(result != null){
                 return new BaseResponse(result, "0", "create successfully");

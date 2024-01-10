@@ -15,6 +15,8 @@ public interface EmployeeMapper {
 
     List<EmployeeResponse> getEmployeeByRole(EmployeeRequest request);
 
+    String getEmployeeIdByAccountId(String id);
+
     List<EmployeeResponse> getAll();
 
     int update(EmployeeRequest request);

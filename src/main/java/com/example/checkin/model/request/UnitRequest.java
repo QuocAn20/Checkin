@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 public class UnitRequest extends Paging {
     private String id;
-    private String unit;
+    private String name;
     private String code;
     private String branch;
     private String note;

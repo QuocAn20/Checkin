@@ -4,7 +4,7 @@
     <update id="update" parameterType="com.example.checkin.model.request.UnitRequest">
         UPDATE unit
         SET
-            unit = #{unit},
+            name = #{name},
             branch = #{branch},
             note = #{note},
             status = #{status}
@@ -16,8 +16,8 @@
         SELECT *
         FROM unit
         <where>
-            <if test="unit != null and unit !=''">
-                and "unit" ILIKE CONCAT('%' || #{unit} || '%')
+            <if test="name != null and name !=''">
+                and "name" ILIKE CONCAT('%' || #{name} || '%')
             </if>
         </where>
 
@@ -30,13 +30,13 @@
             resultType="com.example.checkin.model.response.UnitResponse">
         INSERT INTO unit(
             code,
-            unit,
+            name,
             branch,
             note,
             status
         )VALUES (
             #{code},
-            #{unit},
+            #{name},
             #{branch},
             #{note},
             #{status}
@@ -46,8 +46,8 @@
             resultType="java.lang.Integer">
         SELECT COUNT(*) FROM unit
         <where>
-            <if test="unit != null and unit !=''">
-                and "unit" ILIKE CONCAT('%' || #{unit} || '%')
+            <if test="name != null and name !=''">
+                and "name" ILIKE CONCAT('%' || #{name} || '%')
             </if>
         </where>
     </select>

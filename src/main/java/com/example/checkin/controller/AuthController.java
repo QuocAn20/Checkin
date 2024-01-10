@@ -1,7 +1,10 @@
 package com.example.checkin.controller;
 
 import com.example.checkin.contant.Constants;
+import com.example.checkin.model.request.CheckInOutRequest;
+import com.example.checkin.model.response.BaseResponse;
 import com.example.checkin.model.response.UserResponse;
+import com.example.checkin.service.ICheckInOutService;
 import com.example.checkin.service.IUserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -24,6 +27,9 @@ public class AuthController {
     @Autowired
     private IUserService userService;
 
+    @Autowired
+    private ICheckInOutService checkInOutService;
+
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object> user) throws AuthException {
         String userName = (String) user.get("username");
@@ -37,7 +43,7 @@ public class AuthController {
 
         if(response == null) {
             Map<String, Object> map = new HashMap<>();;
-            map.put("response", response);
+            map.put("response", null);
 
             return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST );
         }
@@ -50,6 +56,7 @@ public class AuthController {
                 .setIssuedAt(new Date(timestamp))
                 .setExpiration(new Date(timestamp + Constants.TOKEN_VALIDITY))
                 .claim("name", user.getName())
+                .claim("id", user.getId())
                 .claim("role", user.getRole())
                 .compact();
         Map<String, Object> map = new HashMap<>();
