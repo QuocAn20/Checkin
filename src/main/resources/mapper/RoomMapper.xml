@@ -22,6 +22,9 @@
             <if test="branch != null and branch !=''">
                 and "branch" ILIKE CONCAT('%' || #{branch} || '%')
             </if>
+            <if test="status != null and status !=''">
+                and "status" = #{status}
+            </if>
         </where>
 
         order by code ASC

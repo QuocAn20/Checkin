@@ -24,4 +24,7 @@ public class CheckInOutRequest extends Paging {
     private String soon;
     private String status;
     private String employeeId;
+
+    //export
+    private String fileType;
 }

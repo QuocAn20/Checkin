@@ -27,14 +27,20 @@
 
     <select id="get" parameterType="com.example.checkin.model.request.CheckInOutRequest"
             resultType="com.example.checkin.model.response.CheckInOutResponse">
-        SELECT check_in_out.*,
+        SELECT
                 employee.code AS code,
                 employee.name AS name,
                 employee.room AS room,
                 employee.unit AS unit,
-                check_out - check_in AS work_time,
-                check_in - '08:30:00' AS late,
-                '17:30:00' - check_out AS soon
+        TO_CHAR(date, 'dd-MM-yyyy')as date,
+        TO_CHAR(check_in, 'hh24:mm:ss')as check_in,
+        TO_CHAR(check_out, 'hh24:mm:ss')as check_out,
+        TO_CHAR(work_time, 'hh24:mm:ss')as work_time,
+        TO_CHAR(late, 'hh24:mm:ss')as late,
+        TO_CHAR(soon, 'hh24:mm:ss')as soon,
+                check_in_out.status,
+                check_in_out.id,
+                check_in_out.employee_id
         FROM check_in_out
         LEFT JOIN employee ON check_in_out.employee_id = employee.id
         <where>
@@ -49,6 +55,9 @@
             </if>
             <if test="status != null and status !=''">
                 and "status" ILIKE CONCAT('%' || #{status} || '%')
+            </if>
+            <if test="employeeId != null and employeeId !=''">
+                and "employee_id" = #{employeeId}::uuid
             </if>
         </where>
     </select>
