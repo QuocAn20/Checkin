@@ -2,12 +2,19 @@ package com.example.checkin.controller;
 
 import com.example.checkin.model.request.EmployeeRequest;
 import com.example.checkin.service.IEmployeeService;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.checkin.model.response.BaseResponse;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 @CrossOrigin
 @RestController

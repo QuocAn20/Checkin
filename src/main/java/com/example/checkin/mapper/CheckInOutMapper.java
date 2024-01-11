@@ -10,7 +10,6 @@ import java.util.List;
 @Mapper
 public interface CheckInOutMapper {
     List<CheckInOutResponse> get(CheckInOutRequest request);
-
     CheckInOutResponse create(CheckInOutRequest request);
     int countCheckInOut(CheckInOutRequest request);
     int updateCheckOut (String id);

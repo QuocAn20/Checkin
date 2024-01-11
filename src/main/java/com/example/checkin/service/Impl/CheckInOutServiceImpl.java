@@ -6,11 +6,21 @@ import com.example.checkin.model.request.CheckInOutRequest;
 import com.example.checkin.model.response.BaseResponse;
 import com.example.checkin.model.response.CheckInOutResponse;
 import com.example.checkin.service.ICheckInOutService;
+import com.example.checkin.utils.ExportUtil;
 import com.google.common.base.Strings;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CheckInOutServiceImpl implements ICheckInOutService {
@@ -49,9 +59,13 @@ public class CheckInOutServiceImpl implements ICheckInOutService {
                     && Strings.isNullOrEmpty((item.getWorkTime()))
                 ){
                     int result = mapper.updateCheckOut(item.getId());
-                    int result1 = mapper.updateTime(item.getId(), request.getStatus());
+
                     if(result > 0){
-                        return new BaseResponse(result, "0", "update successfully");
+                        int updateTime = mapper.updateTime(item.getId(), request.getStatus());
+
+                        if(updateTime > 0){
+                            return new BaseResponse(result, "0", "update successfully");
+                        }
                     }else {
                         return new BaseResponse("1", "update fail");
                     }
@@ -80,5 +94,45 @@ public class CheckInOutServiceImpl implements ICheckInOutService {
         }catch (Exception e){
             return new BaseResponse("-1", "fail");
         }
+    }
+
+    @Override
+    public File export(CheckInOutRequest request) {
+        File file;
+        try {
+            file = File.createTempFile("out", ".tmp");
+            file.deleteOnExit();
+            Resource resource = new ClassPathResource("templates/export-checkin.jasper");
+            try (FileOutputStream fos = new FileOutputStream(file);
+                 InputStream inputStream = resource.getInputStream()) {
+                    List<CheckInOutResponse> list = mapper.get(request);
+//                SimpleDateFormat spd = new SimpleDateFormat("HH:mm:ss");
+//                for (CheckInOutResponse item : list) {
+//                    item.setCode(item.getCode());
+//                    item.setName(item.getName());
+//                    item.setRoom(item.getRoom());
+//                    item.setUnit(item.getUnit());
+//                    item.setDate(item.getDate());
+//                    item.setCheckIn(spd.format(item.getCheckIn()));
+//                    item.setCheckOut(spd.format(item.getCheckOut()));
+//                    item.setWorkTime(spd.format(item.getWorkTime()));
+//                    item.setLate(spd.format(item.getLate()));
+//                    item.setSoon(spd.format(item.getSoon()));
+//                    item.setStatus(item.getStatus());
+//                }
+                if (!list.isEmpty()) {
+                    list.add(0, new CheckInOutResponse());
+                }
+                Map<String, Object> parameters = new HashMap<>();
+                ExportUtil.exportReport(inputStream, fos, parameters, list, "pdf");
+            } catch (Exception e) {
+                e.fillInStackTrace();
+                throw new ServiceException(e.getMessage());
+            }
+        } catch (Exception e) {
+            e.fillInStackTrace();
+            throw new ServiceException(e.getMessage());
+        }
+        return file;
     }
 }

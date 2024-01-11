@@ -29,4 +29,9 @@ public class EmployeeResponse {
     private byte[] imgProfileFile;
     private String status;
     private List<String> role;
+
+    private String accountId;
+    private String password;
+    private String userName;
+    private String roleCode;
 }
