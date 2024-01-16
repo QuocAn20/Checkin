@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.checkin.mapper.LoginConfigMapper">
+    <update id="update" parameterType="com.example.checkin.model.request.LoginConfigRequest">
+        UPDATE login_config
+        SET
+            time_in_login = #{timeInLogin},
+            limit_login = #{limitLogin},
+            limit_login_wrong = #{limitLoginWrong},
+            time_login_again = #{timeLoginAgain}
+        WHERE id = #{id}::uuid
+    </update>
+
+    <select id="get" parameterType="com.example.checkin.model.request.LoginConfigRequest"
+            resultType="com.example.checkin.model.response.LoginConfigResponse">
+        SELECT *
+        FROM login_config
+    </select>
+</mapper>

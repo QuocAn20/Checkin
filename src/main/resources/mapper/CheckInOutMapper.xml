@@ -28,30 +28,30 @@
     <select id="get" parameterType="com.example.checkin.model.request.CheckInOutRequest"
             resultType="com.example.checkin.model.response.CheckInOutResponse">
         SELECT
-                employee.code AS code,
-                employee.name AS name,
-                employee.room AS room,
-                employee.unit AS unit,
-        TO_CHAR(date, 'dd-MM-yyyy')as date,
-        TO_CHAR(check_in, 'hh24:mm:ss')as check_in,
-        TO_CHAR(check_out, 'hh24:mm:ss')as check_out,
-        TO_CHAR(work_time, 'hh24:mm:ss')as work_time,
-        TO_CHAR(late, 'hh24:mm:ss')as late,
-        TO_CHAR(soon, 'hh24:mm:ss')as soon,
-                check_in_out.status,
-                check_in_out.id,
-                check_in_out.employee_id
+            employee.code AS code,
+            employee.name AS name,
+            employee.room AS room,
+            employee.unit AS unit,
+            TO_CHAR(date, 'dd-MM-yyyy')as date,
+            TO_CHAR(check_in, 'hh24:mi:ss')as check_in,
+            TO_CHAR(check_out, 'hh24:mi:ss')as check_out,
+            TO_CHAR(work_time, 'hh24:mi:ss')as work_time,
+            TO_CHAR(late, 'hh24:mi:ss')as late,
+            TO_CHAR(soon, 'hh24:mi:ss')as soon,
+            check_in_out.status,
+            check_in_out.id,
+            check_in_out.employee_id
         FROM check_in_out
         LEFT JOIN employee ON check_in_out.employee_id = employee.id
         <where>
             <if test="room != null and room !=''">
-                and "room" ILIKE CONCAT('%' || #{room} || '%')
+                and employee.room ILIKE CONCAT('%' || #{room} || '%')
             </if>
             <if test="date != null and date !=''">
                 and "date" ILIKE CONCAT('%' || #{date} || '%')
             </if>
             <if test="unit != null and unit !=''">
-                and "unit" ILIKE CONCAT('%' || #{unit} || '%')
+                and employee.unit ILIKE CONCAT('%' || #{unit} || '%')
             </if>
             <if test="status != null and status !=''">
                 and "status" ILIKE CONCAT('%' || #{status} || '%')
@@ -60,6 +60,11 @@
                 and "employee_id" = #{employeeId}::uuid
             </if>
         </where>
+
+        ORDER BY employee.code, "date" ASC
+        <if test="limit > 0">
+            OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
+        </if>
     </select>
 
     <select id="create" parameterType="com.example.checkin.model.request.CheckInOutRequest"
