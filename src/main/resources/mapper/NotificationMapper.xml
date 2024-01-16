@@ -27,6 +27,9 @@
             <if test="object != null and object !=''">
                 and "object" ILIKE CONCAT('%' || #{object} || '%')
             </if>
+            <if test="status != null and status !=''">
+                and "status" = #{status}
+            </if>
         </where>
 
         order by code ASC

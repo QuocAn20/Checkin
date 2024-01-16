@@ -22,7 +22,7 @@
         LEFT JOIN user_account ON menu.creator::uuid = user_account.id
         <where>
             <if test="name != null and name !=''">
-                and "name" ILIKE CONCAT('%' || #{name} || '%')
+                and menu.name ILIKE CONCAT('%' || #{name} || '%')
             </if>
         </where>
 
