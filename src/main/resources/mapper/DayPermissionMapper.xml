@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.checkin.mapper.DayPermissionMapper">
+
+    <select id="getDayPermission" parameterType="String" resultType="String">
+        SELECT name
+        FROM day_permission
+        WHERE work_time_id = #{id}
+    </select>
+
+    <delete id="deleteDayPermission" parameterType="String">
+        DELETE FROM day_permission
+        WHERE work_time_id = #{id}::uuid
+    </delete>
+
+    <insert id="createDayPermission">
+        <foreach collection="name" item="item">
+            INSERT INTO day_permission (
+            work_time_id,
+            name
+            )VALUES(
+            #{id},
+            #{item}
+            )RETURNING *;
+        </foreach>
+    </insert>
+</mapper>

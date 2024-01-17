@@ -56,11 +56,13 @@ public class CheckInOutServiceImpl implements ICheckInOutService {
             List<CheckInOutResponse> listCheckOutById = mapper.getCheckOutById(request);
             for(CheckInOutResponse item : listCheckOutById){
                 if(Strings.isNullOrEmpty(item.getCheckOut())
-                    && Strings.isNullOrEmpty((item.getWorkTime()))
+                        && Strings.isNullOrEmpty((item.getWorkTime()))
                 ){
                     int result = mapper.updateCheckOut(item.getId());
+                    request.setCheckIn(item.getCheckIn());
 
                     if(result > 0){
+
                         int updateTime = mapper.updateTime(item.getId(), request.getStatus());
 
                         if(updateTime > 0){
@@ -71,7 +73,7 @@ public class CheckInOutServiceImpl implements ICheckInOutService {
                     }
                 }
             }
-            return null;
+            return new BaseResponse("1", "update fail");
 
         }catch (Exception e){
             return new BaseResponse("-1", "fail");
@@ -105,7 +107,7 @@ public class CheckInOutServiceImpl implements ICheckInOutService {
             Resource resource = new ClassPathResource("templates/export-checkin.jasper");
             try (FileOutputStream fos = new FileOutputStream(file);
                  InputStream inputStream = resource.getInputStream()) {
-                    List<CheckInOutResponse> list = mapper.get(request);
+                List<CheckInOutResponse> list = mapper.get(request);
 //                SimpleDateFormat spd = new SimpleDateFormat("HH:mm:ss");
 //                for (CheckInOutResponse item : list) {
 //                    item.setCode(item.getCode());

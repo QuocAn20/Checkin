@@ -27,4 +27,6 @@ public class CheckInOutRequest extends Paging {
 
     //export
     private String fileType;
+    private String startTime;
+    private String endTime;
 }
