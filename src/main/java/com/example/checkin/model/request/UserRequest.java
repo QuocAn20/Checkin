@@ -14,4 +14,6 @@ public class UserRequest extends Paging {
     private String userName;
     private String password;
     private String role;
+
+    private String newPassword;
 }

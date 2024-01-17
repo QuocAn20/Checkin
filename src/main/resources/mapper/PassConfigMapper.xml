@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.checkin.mapper.PassConfigMapper">
+    <update id="update" parameterType="com.example.checkin.model.request.PassConfigRequest">
+        UPDATE pass_config
+        SET
+            min_length = #{minLength},
+            max_length = #{maxLength},
+            min_char = #{minChar},
+            min_num = #{minNum},
+            min_sp_char = #{minSPChar},
+            time_over_pass = #{timeOverPass}
+        WHERE id = #{id}::uuid
+    </update>
+
+    <select id="get" parameterType="com.example.checkin.model.request.PassConfigRequest"
+            resultType="com.example.checkin.model.response.PassConfigResponse">
+        SELECT *
+        FROM pass_config
+    </select>
+</mapper>

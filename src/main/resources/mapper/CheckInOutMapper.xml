@@ -8,7 +8,7 @@
         WHERE id = #{id}::uuid
     </update>
 
-    <update id="updateTime" parameterType="string">
+    <update id="updateTime"  parameterType="string">
         UPDATE check_in_out
         SET
             work_time = check_out - check_in,
