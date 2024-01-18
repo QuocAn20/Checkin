@@ -14,6 +14,7 @@ public interface CheckInOutMapper {
     int countCheckInOut(CheckInOutRequest request);
     int updateCheckOut (String id);
 
-    int updateTime (@Param("id") String id,@Param("status") String status);
+    int updateTime (@Param("id") String id, @Param("status") String status
+            , @Param("startTime") String startTime, @Param("endTime") String endTime);
     List<CheckInOutResponse> getCheckOutById (CheckInOutRequest request);
 }
