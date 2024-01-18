@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.checkin.mapper.LanguagePermissionMapper">
+
+    <select id="getLanguagePermission" parameterType="String" resultType="String">
+        SELECT name
+        FROM language_permission
+        WHERE language_id = #{id}
+    </select>
+
+    <delete id="deleteLanguagePermission" parameterType="String">
+        DELETE FROM language_permission
+        WHERE language_id = #{id}::uuid
+    </delete>
+
+    <insert id="createLanguagePermission">
+        <foreach collection="name" item="item">
+            INSERT INTO language_permission (
+            language_id,
+            name
+            )VALUES(
+            #{id},
+            #{item}
+            )RETURNING *;
+        </foreach>
+    </insert>
+</mapper>

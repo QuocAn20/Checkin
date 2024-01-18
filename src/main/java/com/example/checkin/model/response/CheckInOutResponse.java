@@ -21,4 +21,7 @@ public class CheckInOutResponse {
     private String soon;
     private String status;
     private String employeeId;
+
+    private String startTime;
+    private String endTime;
 }

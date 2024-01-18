@@ -63,7 +63,8 @@ public class CheckInOutServiceImpl implements ICheckInOutService {
 
                     if(result > 0){
 
-                        int updateTime = mapper.updateTime(item.getId(), request.getStatus());
+                        int updateTime = mapper.updateTime(item.getId(), request.getStatus()
+                                , request.getStartTime(), request.getEndTime());
 
                         if(updateTime > 0){
                             return new BaseResponse(result, "0", "update successfully");

@@ -1,0 +1,14 @@
+package com.example.checkin.mapper;
+
+import com.example.checkin.model.request.LanguageRequest;
+import com.example.checkin.model.response.LanguageResponse;
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+
+@Mapper
+public interface LanguageMapper {
+    List<LanguageResponse> get(LanguageRequest request);
+
+    int update(LanguageRequest request);
+}

@@ -8,12 +8,12 @@
         WHERE id = #{id}::uuid
     </update>
 
-    <update id="updateTime"  parameterType="string">
+    <update id="updateTime"  parameterType="com.example.checkin.model.request.CheckInOutRequest">
         UPDATE check_in_out
         SET
             work_time = check_out - check_in,
-            late = check_in - '08:30:00'::time,
-            soon = '17:30:00'::time - check_out,
+            late = check_in - #{startTime}::time,
+            soon = #{endTime}::time - check_out,
             status = #{status}
         WHERE id = #{id}::uuid;
     </update>
