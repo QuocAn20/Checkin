@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.checkin.mapper.SurveyMapper">
+    <update id="update" parameterType="com.example.checkin.model.request.SurveyRequest">
+        UPDATE survey
+        SET
+            name = #{name},
+            question = #{question},
+            question_type = #{questionType},
+            object_require = #{objectRequire},
+            object_nonrequire = #{objectNonRequire},
+            start_time = #{startTime},
+            end_time = #{endTime},
+            percent = #{percent},
+            note = #{note},
+            status = #{status}
+        WHERE id = #{id}::uuid
+    </update>
+    <delete id="delete">
+        DELETE
+        FROM survey
+        WHERE id = #{id}::uuid
+    </delete>
+
+    <select id="create" parameterType="com.example.checkin.model.request.SurveyRequest"
+            resultType="com.example.checkin.model.response.SurveyResponse">
+        INSERT INTO survey(
+            code,
+            name,
+            create_date,
+            question,
+            question_type,
+            object_require,
+            object_nonrequire,
+            start_time,
+            end_time,
+            percent,
+            note,
+            status)
+        VALUES (
+            #{code},
+            #{name},
+            NOW(),
+            #{question},
+            #{questionType},
+            #{objectRequire},
+            #{objectNonRequire},
+            #{startTime},
+            #{endTime},
+            #{percent},
+            #{note},
+            #{status}
+        ) RETURNING *;
+    </select>
+    <select id="get" parameterType="com.example.checkin.model.request.SurveyRequest"
+            resultType="com.example.checkin.model.response.SurveyResponse">
+        SELECT *
+        FROM survey
+        <where>
+            <if test="code !=null and code !=''">
+                AND "code" = #{code}
+            </if>
+            <if test="name !=null and name !=''">
+                AND "name" ILIKE CONCAT('%' || #{name} || '%')
+            </if>
+            <if test="startTime !=null and startTime !=''">
+                AND start_time = #{startTime}
+            </if>
+            <if test="endTime !=null and endTime !=''">
+                AND end_time = #{endTime}
+            </if>
+            <if test="questionType !=null and questionType !=''">
+                AND question_type = #{questionType}
+            </if>
+        </where>
+
+        ORDER BY "code" ASC
+
+        <if test="limit > 0">
+            OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
+        </if>
+    </select>
+    <select id="countSurvey" parameterType="com.example.checkin.model.request.SurveyRequest"
+            resultType="java.lang.Integer">
+        SELECT count(*) FROM survey
+        <where>
+            <if test="code !=null and code !=''">
+                survey.code = #{code}
+            </if>
+            <if test="name !=null and name !=''">
+                AND survey.name ILIKE CONCAT('%' || #{name} || '%')
+            </if>
+            <if test="startTime !=null and startTime !=''">
+                AND start_time = #{startTime}
+            </if>
+            <if test="endTime !=null and endTime !=''">
+                AND end_time = #{endTime}
+            </if>
+            <if test="questionType !=null and questionType !=''">
+                AND question_type = #{questionType}
+            </if>
+        </where>
+    </select>
+    <select id="getCode" parameterType="com.example.checkin.model.request.SurveyRequest"
+            resultType="java.lang.Integer">
+        SELECT COUNT(*) + 1
+        FROM survey
+    </select>
+</mapper>
