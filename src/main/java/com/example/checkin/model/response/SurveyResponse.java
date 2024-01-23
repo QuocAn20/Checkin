@@ -1,9 +1,7 @@
-package com.example.checkin.model.request;
+package com.example.checkin.model.response;
 
-import com.example.checkin.model.dto.Paging;
 import lombok.*;
 
-import java.util.Date;
 import java.util.List;
 
 @NoArgsConstructor
@@ -11,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @Data
-public class SurveyRequest extends Paging {
+public class SurveyResponse {
     private String id;
     private String code;
     private String name;
