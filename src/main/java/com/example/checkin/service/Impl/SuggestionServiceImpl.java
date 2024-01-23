@@ -6,11 +6,19 @@ import com.example.checkin.model.response.BaseResponse;
 import com.example.checkin.model.response.SuggestionResponse;
 import com.example.checkin.service.ICommonService;
 import com.example.checkin.service.ISuggestionService;
+import com.example.checkin.utils.ExportUtil;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SuggestionServiceImpl implements ISuggestionService {
@@ -25,10 +33,26 @@ public class SuggestionServiceImpl implements ISuggestionService {
     public BaseResponse getSuggest(SuggestionRequest request) {
         try{
             List<SuggestionResponse> result = mapper.get(request);
-            int countHoliday = mapper.countSuggest(request);
+            int countSuggest = mapper.countSuggest(request);
 
             if(!result.isEmpty()){
-                return new BaseResponse(result, countHoliday, "0", "get successfully");
+                return new BaseResponse(result, countSuggest, "0", "get successfully");
+            }else {
+                return new BaseResponse("1", "get fail");
+            }
+        }catch (Exception e){
+            return new BaseResponse("-1", "fail");
+        }
+    }
+
+    @Override
+    public BaseResponse getCountSuggest(SuggestionRequest request) {
+        try{
+            List<SuggestionResponse> result = mapper.getReport(request);
+            int countSuggest = mapper.countSuggest(request);
+
+            if(!result.isEmpty()){
+                return new BaseResponse(result, countSuggest, "0", "get successfully");
             }else {
                 return new BaseResponse("1", "get fail");
             }
@@ -75,6 +99,27 @@ public class SuggestionServiceImpl implements ISuggestionService {
 
     @Override
     public File export(SuggestionRequest request) {
-        return null;
+        File file;
+        try {
+            file = File.createTempFile("out", ".tmp");
+            file.deleteOnExit();
+            Resource resource = new ClassPathResource("templates/export-feedback.jasper");
+            try (FileOutputStream fos = new FileOutputStream(file);
+                 InputStream inputStream = resource.getInputStream()) {
+                List<SuggestionResponse> list = mapper.getReport(request);
+                if (!list.isEmpty()) {
+                    list.add(0, new SuggestionResponse());
+                }
+                Map<String, Object> parameters = new HashMap<>();
+                ExportUtil.exportReport(inputStream, fos, parameters, list, "pdf");
+            } catch (Exception e) {
+                e.fillInStackTrace();
+                throw new ServiceException(e.getMessage());
+            }
+        } catch (Exception e) {
+            e.fillInStackTrace();
+            throw new ServiceException(e.getMessage());
+        }
+        return file;
     }
 }

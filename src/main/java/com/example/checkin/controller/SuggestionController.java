@@ -31,6 +31,11 @@ public class SuggestionController {
         return new ResponseEntity<>(suggestionService.getSuggest(request), HttpStatus.OK);
     }
 
+    @PostMapping(value = "/getCountSuggest", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> getCountSuggest(@RequestBody SuggestionRequest request){
+        return new ResponseEntity<>(suggestionService.getCountSuggest(request), HttpStatus.OK);
+    }
+
     @PostMapping(value = "/createSuggest", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> createSuggest(@RequestBody SuggestionRequest request){
         return new ResponseEntity<>(suggestionService.createSuggest(request), HttpStatus.OK);

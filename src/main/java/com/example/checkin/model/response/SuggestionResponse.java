@@ -15,8 +15,13 @@ public class SuggestionResponse {
     private String creatorId;
     private String creator;
     private String room;
+    private String unit;
     private String suggestion;
     private String reply;
     private String note;
     private String status;
+
+    private String fileType;
+
+    private int countSuggest;
 }

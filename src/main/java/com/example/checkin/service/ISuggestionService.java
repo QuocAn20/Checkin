@@ -7,6 +7,7 @@ import java.io.File;
 
 public interface ISuggestionService {
     BaseResponse getSuggest(SuggestionRequest request);
+    BaseResponse getCountSuggest(SuggestionRequest request);
 
     BaseResponse updateSuggest(SuggestionRequest request);
 

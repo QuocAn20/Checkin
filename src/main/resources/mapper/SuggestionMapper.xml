@@ -4,7 +4,7 @@
     <update id="update" parameterType="com.example.checkin.model.request.SuggestionRequest">
         UPDATE suggest
         SET
-            suggesttion = #{suggestion},
+            suggestion = #{suggestion},
             reply = #{reply},
             status = #{status},
             note = #{note}
@@ -65,14 +65,70 @@
     </select>
     <select id="countSuggest" parameterType="com.example.checkin.model.request.SuggestionRequest"
             resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM suggest
+        SELECT COUNT(*)
+        FROM suggest
+        LEFT JOIN employee ON suggest.creator_id = employee.account_id
+
         <where>
             <if test="name != null and name !=''">
-                and "name" ILIKE CONCAT('%' || #{name} || '%')
+                and suggest.name ILIKE CONCAT('%' || #{name} || '%')
+            </if>
+            <if test="status != null and status !=''">
+                and "status" = #{status}
+            </if>
+            <if test="creator != null and creator !=''">
+                and employee.name = #{creator}
+            </if>
+            <if test="room != null and room !=''">
+                and employee.room = #{room}
+            </if>
+            <if test="unit != null and unit !=''">
+                and employee.unit = #{unit}
+            </if>
+            <if test="createDate != null and createDate !=''">
+                and create_date = #{createDate}
             </if>
         </where>
     </select>
     <select id="getCode" resultType="java.lang.Integer">
         SELECT COUNT(*) + 1 FROM suggest
+    </select>
+    <select id="getReport" parameterType="com.example.checkin.model.request.SuggestionRequest"
+            resultType="com.example.checkin.model.response.SuggestionResponse">
+        SELECT COUNT(*) AS countSuggest,
+            suggest.create_date AS createDate,
+            suggest.status AS status,
+            suggest.name AS name,
+            employee.name AS creator,
+            employee.room AS room,
+            employee.unit AS unit
+        FROM suggest
+        LEFT JOIN employee ON suggest.creator_id = employee.account_id
+
+        <where>
+            <if test="name != null and name !=''">
+                and suggest.name ILIKE CONCAT('%' || #{name} || '%')
+            </if>
+            <if test="status != null and status !=''">
+                and "status" = #{status}
+            </if>
+            <if test="creator != null and creator !=''">
+                and employee.name = #{creator}
+            </if>
+            <if test="room != null and room !=''">
+                and employee.room = #{room}
+            </if>
+            <if test="unit != null and unit !=''">
+                and employee.unit = #{unit}
+            </if>
+            <if test="createDate != null and createDate !=''">
+                and create_date = #{createDate}
+            </if>
+        </where>
+        GROUP BY suggest.name, suggest.create_date, suggest.status, employee.name, employee.room, employee.unit
+        order by create_date ASC
+        <if test="limit > 0">
+            OFFSET (#{page} - 1) * #{limit} FETCH NEXT  #{limit} ROWS ONLY
+        </if>
     </select>
 </mapper>

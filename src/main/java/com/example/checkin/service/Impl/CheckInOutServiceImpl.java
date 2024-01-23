@@ -109,20 +109,6 @@ public class CheckInOutServiceImpl implements ICheckInOutService {
             try (FileOutputStream fos = new FileOutputStream(file);
                  InputStream inputStream = resource.getInputStream()) {
                 List<CheckInOutResponse> list = mapper.get(request);
-//                SimpleDateFormat spd = new SimpleDateFormat("HH:mm:ss");
-//                for (CheckInOutResponse item : list) {
-//                    item.setCode(item.getCode());
-//                    item.setName(item.getName());
-//                    item.setRoom(item.getRoom());
-//                    item.setUnit(item.getUnit());
-//                    item.setDate(item.getDate());
-//                    item.setCheckIn(spd.format(item.getCheckIn()));
-//                    item.setCheckOut(spd.format(item.getCheckOut()));
-//                    item.setWorkTime(spd.format(item.getWorkTime()));
-//                    item.setLate(spd.format(item.getLate()));
-//                    item.setSoon(spd.format(item.getSoon()));
-//                    item.setStatus(item.getStatus());
-//                }
                 if (!list.isEmpty()) {
                     list.add(0, new CheckInOutResponse());
                 }

@@ -10,6 +10,7 @@ public interface SuggestionMapper {
     SuggestionResponse create (SuggestionRequest request);
 
     List<SuggestionResponse> get (SuggestionRequest request);
+    List<SuggestionResponse> getReport (SuggestionRequest request);
 
     int update (SuggestionRequest request);
 
