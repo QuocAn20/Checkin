@@ -24,4 +24,7 @@ public class CheckInOutResponse {
 
     private String startTime;
     private String endTime;
+
+    private int countLate;
+    private String month;
 }

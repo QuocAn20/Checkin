@@ -91,4 +91,11 @@
             </if>
         </where>
     </select>
+    <select id="countLateCheckIn" parameterType="com.example.checkin.model.request.CheckInOutRequest"
+            resultType="java.lang.Integer">
+        SELECT COUNT(*) AS countLate
+        FROM check_in_out
+        WHERE TO_CHAR(date, 'yyyy-MM') = CONCAT(CAST(EXTRACT(YEAR FROM CURRENT_DATE) AS VARCHAR) || '-' || #{month})
+          AND  late > '00:05:00'::time
+    </select>
 </mapper>

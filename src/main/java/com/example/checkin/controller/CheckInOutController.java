@@ -30,6 +30,11 @@ public class CheckInOutController {
         return new ResponseEntity<>(checkInOutservice.getCheckInOut(request), HttpStatus.OK);
     }
 
+    @PostMapping(value = "/getCountLate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> getCountLate(@RequestBody CheckInOutRequest request){
+        return new ResponseEntity<>(checkInOutservice.getCountLate(request), HttpStatus.OK);
+    }
+
     @PostMapping(value = "/createInOut", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> createInOut(@RequestBody CheckInOutRequest request){
         return new ResponseEntity<>(checkInOutservice.createCheckInOut(request), HttpStatus.OK);
