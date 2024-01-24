@@ -8,6 +8,8 @@ import java.io.File;
 public interface ICheckInOutService {
     BaseResponse getCheckInOut(CheckInOutRequest request);
 
+    BaseResponse getCountLate(CheckInOutRequest request);
+
     BaseResponse updateCheckInOut(CheckInOutRequest request);
 
     BaseResponse createCheckInOut(CheckInOutRequest request);

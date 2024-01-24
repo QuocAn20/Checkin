@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,27 @@ public class CheckInOutServiceImpl implements ICheckInOutService {
             }else {
                 return new BaseResponse("1", "get fail");
             }
+        }catch (Exception e){
+            return new BaseResponse("-1", "fail");
+        }
+    }
+
+    @Override
+    public BaseResponse getCountLate(CheckInOutRequest request) {
+        try{
+            Map<String, List<Integer>> result = new HashMap<>();
+            List<Integer> resultCountLate = new ArrayList<>();
+
+            String monthList[] = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};
+
+            for(String month :monthList){
+                int data = mapper.countLateCheckIn(month);
+                resultCountLate.add(data);
+            }
+
+            result.put("countLate", resultCountLate);
+
+            return new BaseResponse(result, "0", "get successfully");
         }catch (Exception e){
             return new BaseResponse("-1", "fail");
         }

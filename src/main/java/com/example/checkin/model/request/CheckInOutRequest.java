@@ -29,4 +29,7 @@ public class CheckInOutRequest extends Paging {
     private String fileType;
     private String startTime;
     private String endTime;
+
+    private int countLate;
+    private String month;
 }

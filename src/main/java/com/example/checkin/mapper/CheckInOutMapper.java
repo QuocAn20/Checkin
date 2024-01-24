@@ -11,6 +11,8 @@ import java.util.List;
 public interface CheckInOutMapper {
     List<CheckInOutResponse> get(CheckInOutRequest request);
     CheckInOutResponse create(CheckInOutRequest request);
+
+    int countLateCheckIn (String month);
     int countCheckInOut(CheckInOutRequest request);
     int updateCheckOut (String id);
 
