@@ -27,9 +27,6 @@ public class AuthController {
     @Autowired
     private IUserService userService;
 
-    @Autowired
-    private ICheckInOutService checkInOutService;
-
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object> user) throws AuthException {
         String userName = (String) user.get("username");

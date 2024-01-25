@@ -32,7 +32,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Override
     public BaseResponse getEmployee(EmployeeRequest request) {
         try {
-            List<EmployeeResponse> result = new ArrayList<>();
+            List<EmployeeResponse> result;
             if (request.getRole() != null) {
                 result = mapper.getEmployeeByRole(request);
             } else {
