@@ -61,7 +61,7 @@
             </if>
         </where>
 
-        ORDER BY employee.code, "date" ASC
+        ORDER BY employee.code ASC
         <if test="limit > 0">
             OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
         </if>
