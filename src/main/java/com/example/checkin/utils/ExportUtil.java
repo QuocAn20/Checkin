@@ -25,7 +25,7 @@ public class ExportUtil {
     }
 
     public static Object createJRDataSource( List<?> data) {
-        return data != null && data.size() > 0 ? new JRBeanCollectionDataSource(data) : new JREmptyDataSource();
+        return data != null && !data.isEmpty() ? new JRBeanCollectionDataSource(data) : new JREmptyDataSource();
     }
 
     public static void export(JasperPrint jasperPrint, String type, OutputStream outputStream) throws JRException, URISyntaxException {

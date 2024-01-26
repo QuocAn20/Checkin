@@ -23,32 +23,32 @@ import java.io.FileNotFoundException;
 public class CheckInOutController {
 
     @Autowired
-    private ICheckInOutService checkInOutservice;
+    private ICheckInOutService checkInOutService;
 
     @PostMapping(value = "/getInOut", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> getInOut(@RequestBody CheckInOutRequest request){
-        return new ResponseEntity<>(checkInOutservice.getCheckInOut(request), HttpStatus.OK);
+        return new ResponseEntity<>(checkInOutService.getCheckInOut(request), HttpStatus.OK);
     }
 
     @PostMapping(value = "/getCountLate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> getCountLate(@RequestBody CheckInOutRequest request){
-        return new ResponseEntity<>(checkInOutservice.getCountLate(request), HttpStatus.OK);
+        return new ResponseEntity<>(checkInOutService.getCountLate(request), HttpStatus.OK);
     }
 
     @PostMapping(value = "/createInOut", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> createInOut(@RequestBody CheckInOutRequest request){
-        return new ResponseEntity<>(checkInOutservice.createCheckInOut(request), HttpStatus.OK);
+        return new ResponseEntity<>(checkInOutService.createCheckInOut(request), HttpStatus.OK);
     }
 
     @PostMapping(value = "/updateInOut", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> updateInOut(@RequestBody CheckInOutRequest request){
-        return new ResponseEntity<>(checkInOutservice.updateCheckInOut(request), HttpStatus.OK);
+        return new ResponseEntity<>(checkInOutService.updateCheckInOut(request), HttpStatus.OK);
     }
 
     @PostMapping(value = "/export", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<InputStreamResource> export(@RequestBody CheckInOutRequest request) {
         try {
-            File file = checkInOutservice.export(request);
+            File file = checkInOutService.export(request);
             if (file == null) {
                 throw new ServiceException("Nothing to export");
             }
