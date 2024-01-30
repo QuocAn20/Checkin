@@ -2,7 +2,6 @@ package com.example.checkin.model.response;
 
 import lombok.*;
 
-import java.util.Date;
 import java.util.List;
 
 @Data

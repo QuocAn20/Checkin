@@ -5,17 +5,24 @@ import com.example.checkin.mapper.UserMapper;
 import com.example.checkin.model.request.EmployeeRequest;
 import com.example.checkin.model.response.BaseResponse;
 import com.example.checkin.model.response.EmployeeResponse;
+import com.example.checkin.model.response.ImportResponse;
 import com.example.checkin.model.response.UserResponse;
 import com.example.checkin.service.ICommonService;
 import com.example.checkin.service.IEmployeeService;
 import com.google.common.base.Strings;
+import com.monitorjbl.xlsx.StreamingReader;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class EmployeeServiceImpl implements IEmployeeService {
@@ -97,6 +104,69 @@ public class EmployeeServiceImpl implements IEmployeeService {
             return new BaseResponse("1", "Failed");
         }
         return new BaseResponse("1", "Failed");
+    }
+
+    @Override
+    public BaseResponse upload(MultipartFile file) {
+        ImportResponse upload = new ImportResponse();
+        List<EmployeeRequest> listSuccess = new ArrayList<>();
+        List<Map<String, Object>> listError = new ArrayList<>();
+
+        try {
+            int index = 0;
+            StreamingReader reader = StreamingReader.builder().rowCacheSize(100).bufferSize(4096).sheetIndex(0)
+                    .read(file.getInputStream());
+            Iterator<Row> rowIterator = reader.iterator();
+            Row row = rowIterator.next(); // Bỏ qua dòng đầu tiên (HEADER)
+            while (rowIterator.hasNext()) {
+                row = rowIterator.next();
+
+                Cell name = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                Cell dob = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                Cell gender = row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                Cell phone = row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                Cell nationalId = row.getCell(4, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                Cell unit = row.getCell(5, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                Cell room = row.getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                Cell position = row.getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                Cell job = row.getCell(8, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                Cell email = row.getCell(9, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                Cell status = row.getCell(10, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                Cell userName = row.getCell(11, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                Cell password = row.getCell(12, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+
+//                String code = "EMP-";
+//                int getId = mapper.getId() + index;
+//                String pad = commonService.padLeft(String.valueOf(getId), 4, "0");
+
+                EmployeeRequest eRequest = new EmployeeRequest();
+//                eRequest.setCode(code + pad);
+                eRequest.setName(name.getStringCellValue());
+                eRequest.setDob(dob.getStringCellValue());
+                eRequest.setGender(gender.getStringCellValue());
+                eRequest.setPhone(phone.getStringCellValue());
+                eRequest.setNationalId(nationalId.getStringCellValue());
+                eRequest.setUnit(unit.getStringCellValue());
+                eRequest.setRoom(room.getStringCellValue());
+                eRequest.setPosition(position.getStringCellValue());
+                eRequest.setJob(job.getStringCellValue());
+                eRequest.setEmail(email.getStringCellValue());
+                eRequest.setStatus(status.getStringCellValue());
+                eRequest.setUserName(userName.getStringCellValue());
+                eRequest.setPassword(password.getStringCellValue());
+
+                listSuccess.add(eRequest);
+                index++;
+            }
+
+            upload.setListSuccess(listSuccess);
+            upload.setListError(listError);
+
+        } catch (Exception e) {
+            e.fillInStackTrace();
+            return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "Fail");
+        }
+        return new BaseResponse(upload, HttpStatus.OK.name(), "SUCCESS");
     }
 
     @Override

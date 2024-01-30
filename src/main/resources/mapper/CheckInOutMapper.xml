@@ -43,6 +43,7 @@
             check_in_out.employee_id
         FROM check_in_out
         LEFT JOIN employee ON check_in_out.employee_id = employee.id
+        LEFT JOIN user_account ON employee.account_id = user_account.id
         <where>
             <if test="room != null and room !=''">
                 and employee.room ILIKE CONCAT('%' || #{room} || '%')
@@ -53,15 +54,18 @@
             <if test="unit != null and unit !=''">
                 and employee.unit ILIKE CONCAT('%' || #{unit} || '%')
             </if>
+            <if test="code != null and code !=''">
+                and employee.code = #{code}
+            </if>
             <if test="status != null and status !=''">
                 and "status" ILIKE CONCAT('%' || #{status} || '%')
             </if>
             <if test="employeeId != null and employeeId !=''">
-                and "employee_id" = #{employeeId}::uuid
+                and user_account.id = #{employeeId}::uuid
             </if>
         </where>
 
-        ORDER BY employee.code ASC
+        ORDER BY check_in_out.date DESC
         <if test="limit > 0">
             OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
         </if>
