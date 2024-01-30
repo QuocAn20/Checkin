@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,5 +48,10 @@ public class EmployeeController {
     @PostMapping(value = "/createEmployee", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> createEmployee(@RequestBody EmployeeRequest request){
         return new ResponseEntity<>(employeeService.createEmployee(request), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> upload(@RequestPart("file") MultipartFile file) {
+        return new ResponseEntity<>(employeeService.upload(file), HttpStatus.OK);
     }
 }
