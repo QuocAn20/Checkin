@@ -54,9 +54,9 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
         } catch (Exception e) {
             e.fillInStackTrace();
-            return new BaseResponse("1", "Failed");
+            return new BaseResponse("1", "Get Failed");
         }
-        return new BaseResponse("1", "Failed");
+        return new BaseResponse("-1", "Failed");
     }
 
     @Override
@@ -65,14 +65,14 @@ public class EmployeeServiceImpl implements IEmployeeService {
             List<EmployeeResponse> result = mapper.getAll();
 
             if (!result.isEmpty()) {
-                return new BaseResponse(result, "0", "Get Successfully");
+                return new BaseResponse(result, "0", "Get All Successfully");
             }
 
         } catch (Exception e) {
             e.fillInStackTrace();
-            return new BaseResponse("1", "Failed");
+            return new BaseResponse("1", "Get All Failed");
         }
-        return new BaseResponse("1", "Failed");
+        return new BaseResponse("-1", "Failed");
     }
 
     @Override
@@ -85,9 +85,9 @@ public class EmployeeServiceImpl implements IEmployeeService {
             }
         } catch (Exception e) {
             e.fillInStackTrace();
-            return new BaseResponse("1", "Failed");
+            return new BaseResponse("1", "Update Failed");
         }
-        return new BaseResponse("1", "Failed");
+        return new BaseResponse("-1", "Failed");
     }
 
     @Override
@@ -101,9 +101,9 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
         } catch (Exception e) {
             e.fillInStackTrace();
-            return new BaseResponse("1", "Failed");
+            return new BaseResponse("1", "Delete Failed");
         }
-        return new BaseResponse("1", "Failed");
+        return new BaseResponse("-1", "Failed");
     }
 
     @Override
@@ -162,11 +162,14 @@ public class EmployeeServiceImpl implements IEmployeeService {
             upload.setListSuccess(listSuccess);
             upload.setListError(listError);
 
+            if(!listSuccess.isEmpty()){
+                return new BaseResponse(upload, "0", "Upload SUCCESS");
+            }
         } catch (Exception e) {
             e.fillInStackTrace();
-            return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "Fail");
+            return new BaseResponse("1", "Upload Fail");
         }
-        return new BaseResponse(upload, HttpStatus.OK.name(), "SUCCESS");
+        return new BaseResponse("-1", "Fail");
     }
 
     @Override
@@ -208,8 +211,8 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
         } catch (Exception e) {
             e.fillInStackTrace();
-            return new BaseResponse("1", "Failed");
+            return new BaseResponse("1", "Create Failed");
         }
-        return new BaseResponse("1", "Failed");
+        return new BaseResponse("-1", "Failed");
     }
 }
