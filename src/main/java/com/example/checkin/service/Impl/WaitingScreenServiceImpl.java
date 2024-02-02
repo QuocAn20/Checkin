@@ -28,7 +28,7 @@ public class WaitingScreenServiceImpl implements IWaitingScreenService {
 
             int countWScreen = mapper.countWScreen(request);
 
-            if(!result.isEmpty()){
+            if(result != null){
                 return new BaseResponse(result, countWScreen, "0", "get successfully");
             }else {
                 return new BaseResponse("1", "get fail");

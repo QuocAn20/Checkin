@@ -26,7 +26,7 @@ public class EventServiceImpl implements IEventService {
             List<EventResponse> result = mapper.get(request);
             int countEvent = mapper.countEvent(request);
 
-            if(!result.isEmpty()){
+            if(result != null){
                 return new BaseResponse(result, countEvent, "0", "get successfully");
             }else {
                 return new BaseResponse("1", "get fail");

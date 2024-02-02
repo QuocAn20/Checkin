@@ -54,7 +54,7 @@
         SELECT COUNT(*) FROM menu
         <where>
             <if test="name != null and name !=''">
-                and "name" ILIKE CONCAT('%' || #{name} || '%')
+                and menu.name ILIKE CONCAT('%' || #{name} || '%')
             </if>
         </where>
     </select>

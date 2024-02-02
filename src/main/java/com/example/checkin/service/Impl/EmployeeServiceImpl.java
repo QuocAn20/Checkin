@@ -48,15 +48,15 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
             int count = mapper.countEmployee(request);
 
-            if (!result.isEmpty()) {
+            if (result != null) {
                 return new BaseResponse(result, count, "0", "Get Successfully");
+            }else {
+                return new BaseResponse("1", "Get Failed");
             }
-
         } catch (Exception e) {
             e.fillInStackTrace();
-            return new BaseResponse("1", "Get Failed");
+            return new BaseResponse("-1", "Failed");
         }
-        return new BaseResponse("-1", "Failed");
     }
 
     @Override

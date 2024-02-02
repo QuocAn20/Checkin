@@ -26,7 +26,7 @@ public class HolidayServiceImpl implements IHolidayService {
             List<HolidayResponse> result = mapper.get(request);
             int countHoliday = mapper.countHoliday(request);
 
-            if(!result.isEmpty()){
+            if(result != null){
                 return new BaseResponse(result, countHoliday, "0", "get successfully");
             }else {
                 return new BaseResponse("1", "get fail");
