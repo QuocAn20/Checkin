@@ -65,20 +65,14 @@
         SELECT employee.*
         FROM employee
         <where>
-            <if test="code !=null and code !=''">
-                employee.code = #{code}
-            </if>
-            <if test="name !=null and name !=''">
-                AND employee.name ILIKE CONCAT('%' || #{name} || '%')
+            <if test="room !=null and room !=''">
+                AND employee.room = #{room}
             </if>
             <if test="gender !=null and gender !=''">
                 AND employee.gender = #{gender}
             </if>
-            <if test="room !=null and room !=''">
-                AND employee.room = #{room}
-            </if>
-            <if test="job !=null and job !=''">
-                AND employee.job = #{job}
+            <if test="position !=null and position !=''">
+                AND employee.position = #{position}
             </if>
             <if test="status !=null and status !=''">
                 AND employee.status = #{status}
@@ -117,20 +111,14 @@
     <select id="countEmployee" parameterType="com.example.checkin.model.request.EmployeeRequest" resultType="java.lang.Integer">
         SELECT count(*) FROM employee
         <where>
-            <if test="code !=null and code !=''">
-                employee.code = #{code}
-            </if>
-            <if test="name !=null and name !=''">
-                AND employee.name ILIKE CONCAT('%' || #{name} || '%')
+            <if test="room !=null and room !=''">
+                AND employee.room = #{room}
             </if>
             <if test="gender !=null and gender !=''">
                 AND employee.gender = #{gender}
             </if>
-            <if test="room !=null and room !=''">
-                AND employee.room = #{room}
-            </if>
-            <if test="job !=null and job !=''">
-                AND employee.job = #{job}
+            <if test="position !=null and position !=''">
+                AND employee.position = #{position}
             </if>
             <if test="status !=null and status !=''">
                 AND employee.status = #{status}

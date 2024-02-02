@@ -34,11 +34,7 @@ public class MenuServiceImpl implements IMenuService {
                 }
             }
 
-            if(!result.isEmpty()){
-                return new BaseResponse(result, countMenu, "0", "get successfully");
-            }else {
-                return new BaseResponse("1", "get fail");
-            }
+            return new BaseResponse(result, countMenu, "0", "get successfully");
         }catch (Exception e){
             return new BaseResponse("-1", "fail");
         }

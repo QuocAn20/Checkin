@@ -26,7 +26,7 @@ public class SurveyServiceImpl implements ISurveyService {
             List<SurveyResponse> result = mapper.get(request);
             int countSurvey = mapper.countSurvey(request);
 
-            if(!result.isEmpty()){
+            if(result != null){
                 return new BaseResponse(result, countSurvey, "0", "get successfully");
             }else {
                 return new BaseResponse("1", "get fail");

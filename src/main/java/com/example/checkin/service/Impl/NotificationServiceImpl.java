@@ -26,7 +26,7 @@ public class NotificationServiceImpl implements INotificationService {
             List<NotificationResponse> result = mapper.get(request);
             int countNotifi = mapper.countNotification(request);
 
-            if(!result.isEmpty()){
+            if(result != null){
                 return new BaseResponse(result, countNotifi, "0", "get successfully");
             }else {
                 return new BaseResponse("1", "get fail");

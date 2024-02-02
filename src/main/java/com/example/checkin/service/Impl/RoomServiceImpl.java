@@ -28,7 +28,7 @@ public class RoomServiceImpl implements IRoomService {
             List<RoomResponse> result = mapper.get(request);
             int countRoom = mapper.countRoom(request);
 
-            if(!result.isEmpty()){
+            if(result != null){
                 return new BaseResponse(result, countRoom, "0", "get successfully");
             }else {
                 return new BaseResponse("1", "get fail");

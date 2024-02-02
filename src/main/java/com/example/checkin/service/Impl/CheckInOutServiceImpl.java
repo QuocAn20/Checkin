@@ -38,7 +38,7 @@ public class CheckInOutServiceImpl implements ICheckInOutService {
             List<CheckInOutResponse> result = mapper.get(request);
             int countCheckInOut = mapper.countCheckInOut(request);
 
-            if(!result.isEmpty()){
+            if(result != null){
                 return new BaseResponse(result, countCheckInOut, "0", "get successfully");
             }else {
                 return new BaseResponse("1", "get fail");
