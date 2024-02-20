@@ -7,6 +7,12 @@
             password = #{newPassword}
         WHERE id = #{id}::uuid
     </update>
+    <update id="updateUserPasswordWithUSName" parameterType="com.example.checkin.model.request.UserRequest">
+        UPDATE user_account
+        SET
+            password = #{newPassword}
+        WHERE username = #{userName}
+    </update>
 
     <select id="createEmployeeAccount" parameterType="com.example.checkin.model.request.EmployeeRequest"
             resultType="com.example.checkin.model.response.UserResponse">
@@ -28,7 +34,7 @@
         WHERE username = #{userName}
         limit 1;
     </select>
-    <select id="checkUsernameExistion" resultType="com.example.checkin.model.response.UserResponse">
+    <select id="checkUsernameExisted" resultType="com.example.checkin.model.response.UserResponse">
         SELECT * FROM user_account
         WHERE username = #{userName}
     </select>
@@ -36,5 +42,16 @@
             resultType="com.example.checkin.model.response.UserResponse">
         SELECT * FROM user_account
         WHERE id = #{id}::uuid
+    </select>
+    <select id="checkExistedEmail" parameterType="com.example.checkin.model.request.EmployeeRequest"
+            resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM user_account
+        LEFT JOIN employee ON employee.account_id = user_account.id
+        WHERE employee.email = #{email}
+    </select>
+    <select id="checkExistedUser"  parameterType="com.example.checkin.model.request.EmployeeRequest"
+            resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM user_account
+        WHERE username = #{userName}
     </select>
 </mapper>

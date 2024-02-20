@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.checkin.mapper.RegisterMapper">
+    <update id="update" parameterType="com.example.checkin.model.request.RegisterRequest">
+        UPDATE register
+        SET
+            name = #{name},
+            question = #{question},
+            question_type = #{questionType},
+            object_require = #{objectRequire},
+            object_nonrequire = #{objectNonRequire},
+            start_time = #{startTime},
+            end_time = #{endTime},
+            note = #{note},
+            status = #{status}
+        WHERE id = #{id}::uuid
+    </update>
+    <delete id="delete">
+        DELETE
+        FROM register
+        WHERE id = #{id}::uuid
+    </delete>
+
+    <select id="create" parameterType="com.example.checkin.model.request.RegisterRequest"
+            resultType="com.example.checkin.model.response.RegisterResponse">
+        INSERT INTO register(
+            code,
+            name,
+            create_date,
+            question,
+            question_type,
+            object_require,
+            object_nonrequire,
+            start_time,
+            end_time,
+            note,
+            status)
+        VALUES (
+            #{code},
+            #{name},
+            NOW(),
+            #{question},
+            #{questionType},
+            #{objectRequire},
+            #{objectNonRequire},
+            #{startTime},
+            #{endTime},
+            #{note},
+            #{status}
+        ) RETURNING *;
+    </select>
+    <select id="get" parameterType="com.example.checkin.model.request.RegisterRequest"
+            resultType="com.example.checkin.model.response.RegisterResponse">
+        SELECT *
+        FROM register
+        <where>
+            <if test="code !=null and code !=''">
+                AND "code" = #{code}
+            </if>
+            <if test="name !=null and name !=''">
+                AND "name" ILIKE CONCAT('%' || #{name} || '%')
+            </if>
+            <if test="startTime !=null and startTime !=''">
+                AND start_time = #{startTime}
+            </if>
+            <if test="endTime !=null and endTime !=''">
+                AND end_time = #{endTime}
+            </if>
+            <if test="questionType !=null and questionType !=''">
+                AND question_type = #{questionType}
+            </if>
+        </where>
+
+        ORDER BY "code" ASC
+
+        <if test="limit > 0">
+            OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
+        </if>
+    </select>
+    <select id="countRegister" parameterType="com.example.checkin.model.request.RegisterRequest"
+            resultType="java.lang.Integer">
+        SELECT count(*) FROM register
+        <where>
+            <if test="code !=null and code !=''">
+                survey.code = #{code}
+            </if>
+            <if test="name !=null and name !=''">
+                AND survey.name ILIKE CONCAT('%' || #{name} || '%')
+            </if>
+            <if test="startTime !=null and startTime !=''">
+                AND start_time = #{startTime}
+            </if>
+            <if test="endTime !=null and endTime !=''">
+                AND end_time = #{endTime}
+            </if>
+            <if test="questionType !=null and questionType !=''">
+                AND question_type = #{questionType}
+            </if>
+        </where>
+    </select>
+    <select id="getCode" parameterType="com.example.checkin.model.request.RegisterRequest"
+            resultType="java.lang.Integer">
+        SELECT COUNT(*) + 1
+        FROM register
+    </select>
+</mapper>

@@ -13,5 +13,7 @@ public interface IUserService {
 
     BaseResponse updateUserPassword(UserRequest request);
 
+    BaseResponse forgotPassword(UserRequest request);
+
     UserResponse validateUser(String userName, String password) throws AuthException;
 }

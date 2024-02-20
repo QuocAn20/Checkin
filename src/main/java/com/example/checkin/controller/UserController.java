@@ -26,4 +26,9 @@ public class UserController {
     public ResponseEntity<BaseResponse> updateUserPassword(@RequestBody UserRequest request) {
         return new ResponseEntity<>(userService.updateUserPassword(request), HttpStatus.OK);
     }
+
+    @PostMapping(value = "/forgotPassword", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> forgotPassword(@RequestBody UserRequest request) {
+        return new ResponseEntity<>(userService.forgotPassword(request), HttpStatus.OK);
+    }
 }
