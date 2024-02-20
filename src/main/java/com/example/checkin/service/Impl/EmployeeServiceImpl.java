@@ -183,7 +183,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
                         "Fiels is requried");
             }
 
-            UserResponse checkUsernameExist = userMapper.checkUsernameExistion(request.getUserName());
+            UserResponse checkUsernameExist = userMapper.checkUsernameExisted(request.getUserName());
             if (checkUsernameExist != null) {
                 return new BaseResponse("1", "Username already in use");
             }
