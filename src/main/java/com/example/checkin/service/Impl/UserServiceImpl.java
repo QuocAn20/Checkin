@@ -52,17 +52,17 @@ public class UserServiceImpl implements IUserService {
             String password = "zogsxqzztaexmzpf";
 
             if(request.getUserName().isEmpty() || request.getEmail().isEmpty()){
-                return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "Email or user id are required");
+                return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "Email or user id are Required");
             }
 //            request.setUserName(request.getUserName().toUpperCase());
             int checkExistedUser = mapper.checkExistedUser(request.getUserName());
             if (checkExistedUser == 0) {
-                return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "Người dùng không tồn tại");
+                return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "User does not Exist!");
             }
 
             int checkEmailForUser = mapper.checkExistedEmail(request.getEmail());
             if (checkEmailForUser == 0) {
-                return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "Something was wrong with email");
+                return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "Something was wrong with Email!");
             }
 
             String passGenRandom = GenerateUtil.generateNumber(6);

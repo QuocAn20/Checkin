@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.checkin.mapper.MenuPermissionMapper">
+
+    <select id="get" parameterType="com.example.checkin.model.request.MenuPermissionRequest"
+            resultType="com.example.checkin.model.response.MenuPermissionResponse">
+        SELECT
+            menu.id AS menuId,
+            menu.name AS menuName,
+            user_account.name AS creator
+        FROM menu
+        LEFT JOIN user_account ON menu.creator::uuid = user_account.id
+        ORDER BY menu.icon ASC
+    </select>
+
+</mapper>
