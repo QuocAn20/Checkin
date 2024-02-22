@@ -76,4 +76,9 @@
             #{parentId}
         ) RETURNING *
     </select>
+    <select id="getAllForPerMission" resultType="com.example.checkin.model.response.MenuResponse">
+        SELECT menu.*, user_account.name AS creatorName FROM menu
+        LEFT JOIN user_account ON menu.creator::uuid = user_account.id
+        ORDER BY menu.icon ASC
+    </select>
 </mapper>

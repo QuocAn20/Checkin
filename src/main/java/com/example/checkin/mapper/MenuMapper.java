@@ -8,6 +8,8 @@ import java.util.List;
 
 @Mapper
 public interface MenuMapper {
+
+    List<MenuResponse> getAllForPerMission();
     List<MenuResponse> get(MenuRequest request);
 
     List<MenuResponse> getMenuByRole(MenuRequest request);

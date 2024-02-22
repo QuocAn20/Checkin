@@ -19,5 +19,8 @@ public class MenuResponse {
     private String creatorName;
     private String parentId;
     private int numerate;
+
     private List<String> roleCode;
+    private boolean adminChecked;
+    private boolean emplChecked;
 }
