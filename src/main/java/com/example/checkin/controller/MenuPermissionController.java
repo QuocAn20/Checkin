@@ -1,7 +1,6 @@
 package com.example.checkin.controller;
 
 import com.example.checkin.model.request.MenuPermissionRequest;
-import com.example.checkin.model.request.MenuRequest;
 import com.example.checkin.model.response.BaseResponse;
 import com.example.checkin.service.IPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;

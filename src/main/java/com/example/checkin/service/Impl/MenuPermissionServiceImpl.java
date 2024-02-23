@@ -6,6 +6,7 @@ import com.example.checkin.model.request.MenuPermissionRequest;
 import com.example.checkin.model.response.BaseResponse;
 import com.example.checkin.model.response.MenuPermissionResponse;
 import com.example.checkin.service.IPermissionService;
+import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,16 +47,19 @@ public class MenuPermissionServiceImpl implements IPermissionService {
     @Override
     public BaseResponse updateMenuPer(MenuPermissionRequest request) {
         try {
-            request.setRoleCode("EMPLOYEE");
+            if(Strings.isNullOrEmpty(request.getMenuId())){
+                return new BaseResponse("1", "Id is empty");
+            }
 
             if(request.isEmplChecked()) {
+                int deleteOldPermission = permissionMapper.deletePermission(request.getMenuId());
                 permissionMapper.createPermission(request.getMenuId(), Collections.singletonList("ADMIN"));
                 permissionMapper.createPermission(request.getMenuId(), Collections.singletonList("EMPLOYEE"));
             }else {
                 int deleteOldPermission = permissionMapper.deletePermission(request.getMenuId());
                 permissionMapper.createPermission(request.getMenuId(), Collections.singletonList("ADMIN"));
             }
-            return new BaseResponse( "0", "update successfully");
+            return new BaseResponse("0", "update successfully");
         } catch (Exception e) {
             e.fillInStackTrace();
             return new BaseResponse("-1", "fail");

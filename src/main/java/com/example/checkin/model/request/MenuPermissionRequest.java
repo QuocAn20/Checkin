@@ -12,6 +12,5 @@ public class MenuPermissionRequest {
     private String menuName;
     private boolean adminChecked;
     private boolean emplChecked;
-    private String roleCode;
     private String creator;
 }
